@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Project{% endblock %}
+{% block title %}Nouveau projet{% endblock %}
 
 {% block body %}
-    <h1>Create new Project</h1>
+    <h1>Création d'un nouveau projet</h1>
 
     {{ include('project/_form.html.twig') }}
 
-    <a href="{{ path('app_project_index') }}">back to list</a>
+    <a href="{{ path('app_project_index') }}">Retour à la liste</a>
 {% endblock %}

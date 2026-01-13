@@ -14,6 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/project')]
 final class ProjectController extends AbstractController
 {
+    /**
+     * Listing des projets.
+     *
+     * @param ProjectRepository $projectRepository
+     *
+     * @return Response
+     */
     #[Route(name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository): Response
     {
@@ -22,6 +29,14 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Création d'un projet.
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return Response
+     */
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,6 +65,15 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Mise à jour d'un projet.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
@@ -68,6 +92,15 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Suppression d'un projet.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_project_delete', methods: ['POST'])]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
