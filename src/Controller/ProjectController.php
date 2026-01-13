@@ -57,6 +57,13 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Détail d'un projet.
+     *
+     * @param Project $project
+     *
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     public function show(Project $project): Response
     {

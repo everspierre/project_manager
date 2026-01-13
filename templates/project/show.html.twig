@@ -22,9 +22,45 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_project_index') }}">back to list</a>
+    <a href="{{ path('app_project_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_project_edit', {'id': project.id}) }}">edit</a>
+    <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
 
     {{ include('project/_delete_form.html.twig') }}
+
+    <h1>Liste des tâches</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in project.tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.startingDate ? task.startingDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ task.endingDate ? task.endingDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_task_show', {'id': task.id}) }}">Voir</a>
+                    <a href="{{ path('app_task_edit', {'id': task.id}) }}">Mettre à jour</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucune tâche</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('app_task_new', {'project_id': project.id}) }}">Ajouter une tâche</a>
+
 {% endblock %}

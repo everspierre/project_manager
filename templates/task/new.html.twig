@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle tâche{% endblock %}
+
+{% block body %}
+    <h1>Création d'une nouvelle tâche</h1>
+
+    {{ include('task/_form.html.twig') }}
+
+    <a href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au détail du projet</a>
+{% endblock %}
