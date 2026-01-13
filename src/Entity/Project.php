@@ -45,9 +45,27 @@ class Project
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', orphanRemoval: true)]
     private Collection $tasks;
 
+    /**
+     * Utilisateur propriétaire du projet.
+     *
+     * @var User|null
+     */
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
+    /**
+     * Utilisateurs contributeurs du projet.
+     *
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projectContributions')]
+    private Collection $contributors;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->contributors = new ArrayCollection();
     }
 
     /**
@@ -152,5 +170,81 @@ class Project
         }
 
         return $this;
+    }
+
+    /**
+     * Retourne le propriétaire du projet.
+     *
+     * @return User|null
+     */
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Initialise le propriétaire du projet et retourne le projet.
+     *
+     * @param User|null $owner
+     *
+     * @return $this
+     */
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Retourne les contributeurs du projet.
+     *
+     * @return Collection<int, User>
+     */
+    public function getContributors(): Collection
+    {
+        return $this->contributors;
+    }
+
+    /**
+     * Ajoute un contributeur au projet et retourne le projet.
+     *
+     * @param User $contributor
+     *
+     * @return $this
+     */
+    public function addContributor(User $contributor): static
+    {
+        if (!$this->contributors->contains($contributor)) {
+            $this->contributors->add($contributor);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Supprime un contributeur du projet et retourne le projet.
+     *
+     * @param User $contributor
+     *
+     * @return $this
+     */
+    public function removeContributor(User $contributor): static
+    {
+        $this->contributors->removeElement($contributor);
+
+        return $this;
+    }
+
+    /**
+     * Vérifie si un utilisateur est contributeur du projet.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isContributor(User $user): bool
+    {
+        return $this->contributors->contains($user);
     }
 }
