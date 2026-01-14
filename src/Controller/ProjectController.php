@@ -3,16 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/')]
+#[Route('/project')]
 #[IsGranted('ROLE_USER')]
 final class ProjectController extends AbstractController
 {
@@ -27,7 +29,7 @@ final class ProjectController extends AbstractController
     public function index(ProjectRepository $projectRepository): Response
     {
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
+            'projects' => $projectRepository->findByUser(),
         ]);
     }
 
@@ -124,5 +126,30 @@ final class ProjectController extends AbstractController
         }
 
         return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Suppression d'un contributeur.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @param User $contributor
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return Response
+     */
+    #[Route('/{id}/{user_id}', name: 'app_project_delete_contributor', methods: ['POST'])]
+    #[IsGranted('edit', 'project')]
+    public function deleteContributor(Request $request, Project $project, #[MapEntity(id: 'user_id')] User $contributor,EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))
+            && !$project->isOwner($contributor)
+            && $project->isContributor($contributor)
+        ) {
+            $project->removeContributor($contributor);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_project_show', ['id' => $project->getId()], Response::HTTP_SEE_OTHER);
     }
 }

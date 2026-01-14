@@ -12,6 +12,7 @@
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Nombre de tâches</th>
+                <th>Nombre de collaborateurs</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,9 +23,12 @@
                 <td>{{ project.name }}</td>
                 <td>{{ project.description }}</td>
                 <td>{{ project.tasks|length }}</td>
+                <td>{{ project.contributors|length }}</td>
                 <td>
                     <a href="{{ path('app_project_show', {'id': project.id}) }}">Voir</a>
-                    <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
+                    {% if is_granted('edit', project) %}
+                        <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

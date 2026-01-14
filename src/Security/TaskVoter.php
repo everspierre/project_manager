@@ -2,19 +2,17 @@
 
 namespace App\Security;
 
-use App\Entity\Project;
+use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class ProjectVoter extends Voter
+class TaskVoter extends Voter
 {
     const VIEW = 'view';
     const EDIT = 'edit';
-
-    const CREATE_TASK  = 'create_task';
 
     /**
      * @param AccessDecisionManagerInterface $accessDecisionManager
@@ -34,11 +32,11 @@ class ProjectVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::CREATE_TASK])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT])) {
             return false;
         }
 
-        if (!$subject instanceof Project) {
+        if (!$subject instanceof Task) {
             return false;
         }
 
@@ -69,79 +67,46 @@ class ProjectVoter extends Voter
             return true;
         }
 
-        /** @var Project $project */
-        $project = $subject;
-
         return match($attribute) {
-            self::VIEW => $this->canView($project, $user),
-            self::EDIT => $this->canEdit($project, $user, $vote),
-            self::CREATE_TASK => $this->canCreateTask($project, $user, $vote),
+            self::VIEW => $this->canView($task, $user),
+            self::EDIT => $this->canEdit($task, $user, $vote),
             default => throw new \LogicException('This code should not be reached!')
         };
     }
 
     /**
-     * Vérifie si l'utilisateur peut visualiser le projet.
+     * Vérifie si l'utilisateur peut visualiser la tâche.
      *
-     * @param Project $project
+     * @param Task|null $task
      * @param User $user
      *
      * @return bool
      */
-    public function canView(Project $project, User $user): bool
+    public function canView(?Task $task, User $user): bool
     {
-        if ($this->canEdit($project, $user, null)) {
+        if ($this->canEdit($task, $user, null)) {
             return true;
         }
-
-        return $project->isContributor($user);
     }
 
     /**
-     * Vérifie si l'utilisateur peut mettre à jour le projet.
+     * Vérifie si l'utilisateur peut mettre à jour la tâche.
      *
-     * @param Project $project
+     * @param Task|null $task
      * @param User $user
      * @param Vote|null $vote
      *
      * @return bool
      */
-    public function canEdit(Project $project, User $user, ?Vote $vote): bool
+    public function canEdit(?Task $task, User $user, ?Vote $vote): bool
     {
-        if ($user === $project->getOwner()) {
-            return true;
-        }
-
-        $vote?->addReason(sprintf(
-            "L'utilisateur connecté (email: %s) n'est pas l'auteur de ce projet (projet: %d).",
-            $user->getEmail(), $project->getName()
-        ));
-
-        return false;
-    }
-
-    /**
-     * Vérifie si l'utilisateur peut mettre à jour les tâches du projet.
-     *
-     * @param Project $project
-     * @param User $user
-     * @param Vote|null $vote
-     *
-     * @return bool
-     */
-    public function canCreateTask(Project $project, User $user, ?Vote $vote): bool
-    {
-        if ($this->canEdit($project, $user, $vote)) {
-            return true;
-        }
-
-        if ($project->isContributor($user)) {
+        if ($task->getProject()->isContributor($user)) {
             return true;
         }
 
         $vote?->addReason(sprintf(
             "L'utilisateur connecté (email: %s) n'est pas contributeur de ce projet (projet: %d).",
-            $user->getEmail(), $project->getName()
+            $user->getEmail(), $task?->getProject()->getName()
         ));
 
         return false;

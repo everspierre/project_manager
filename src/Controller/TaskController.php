@@ -27,6 +27,7 @@ final class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/new/{project_id}', name: 'app_task_new', methods: ['GET', 'POST'])]
+    #[IsGranted('create_task', 'project')]
     public function new(Request $request, #[MapEntity(id: 'project_id')] Project $project, EntityManagerInterface $entityManager): Response
     {
         $task = new Task();
@@ -38,7 +39,7 @@ final class TaskController extends AbstractController
             $entityManager->persist($task);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_project_show', ['id' => $project->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('task/new.html.twig', [
@@ -55,6 +56,7 @@ final class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
+    #[IsGranted('view', 'task')]
     public function show(Task $task): Response
     {
         return $this->render('task/show.html.twig', [
@@ -72,6 +74,7 @@ final class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('edit', 'task')]
     public function edit(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(TaskType::class, $task);
@@ -101,6 +104,7 @@ final class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/{id}', name: 'app_task_delete', methods: ['POST'])]
+    #[IsGranted('edit', 'task')]
     public function delete(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))) {
@@ -108,6 +112,6 @@ final class TaskController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_project_show', ['id' => $task->getProject()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

@@ -197,6 +197,18 @@ class Project
     }
 
     /**
+     * Vérifie si l'utilisateur est le propriétaire.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isOwner(User $user): bool
+    {
+        return $this->owner->getId() === $user->getId();
+    }
+
+    /**
      * Retourne les contributeurs du projet.
      *
      * @return Collection<int, User>
