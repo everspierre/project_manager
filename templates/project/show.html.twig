@@ -19,14 +19,20 @@
                 <th>Description</th>
                 <td>{{ project.description }}</td>
             </tr>
+            <tr>
+                <th>Responsable</th>
+                <td>{{ project.owner.email }}</td>
+            </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_project_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
+    {% if is_granted('edit', project) %}
+        <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
 
-    {{ include('project/_delete_form.html.twig') }}
+        {{ include('project/_delete_form.html.twig') }}
+    {% endif %}
 
     <h1>Liste des tâches</h1>
 
@@ -61,6 +67,41 @@
         {% endfor %}
         </tbody>
     </table>
-    <a href="{{ path('app_task_new', {'project_id': project.id}) }}">Ajouter une tâche</a>
+    {% if app.user in project.contributors %}
+        <a href="{{ path('app_task_new', {'project_id': project.id}) }}">Ajouter une tâche</a>
+    {% endif %}
+
+    <h1>Liste des contributeurs</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contributor in project.contributors %}
+            <tr>
+                <td>{{ contributor.id }}</td>
+                <td>{{ contributor.firstname }}</td>
+                <td>{{ contributor.lastname }}</td>
+                <td>{{ contributor.email }}</td>
+                {% if project.owner.id != contributor.id and is_granted('edit', project) %}
+                    <th>{% include 'project/contributor/_delete_form.html.twig' with {'contributor': contributor} %}</th>
+                {% else %}
+                    <th></th>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun contributeur</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
