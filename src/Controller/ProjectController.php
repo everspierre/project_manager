@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\ProjectFiltering;
 use App\Entity\User;
+use App\Form\ProjectFilteringForm;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +33,12 @@ final class ProjectController extends AbstractController
     #[Route(name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $projectFiltering = new ProjectFiltering();
+        $projectFilteringForm = $this->createForm(ProjectFilteringForm::class, $projectFiltering);
+        $projectFilteringForm->handleRequest($request);
+
         $projects = $paginator->paginate(
-            $projectRepository->findByUser(),
+            $projectRepository->findAllPaginated($projectFiltering),
             $request->query->getInt('page', 1),
         );
 
@@ -40,6 +46,7 @@ final class ProjectController extends AbstractController
 
         return $this->render('project/index.html.twig', [
             'projects' => $projects,
+            'form' => $projectFilteringForm
         ]);
     }
 
