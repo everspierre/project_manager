@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
-use App\Entity\User;
+use App\Entity\ProjectFiltering;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,9 +22,11 @@ class ProjectRepository extends ServiceEntityRepository
     /**
      * Retourne les projects associés à l'utilisateur connecté (propriétaire ou contributeur).
      *
-     * @return array
+     * @param ProjectFiltering|null $projectFiltering
+     *
+     * @return Query
      */
-    public function findByUser(): array
+    public function findAllPaginated(?ProjectFiltering $projectFiltering): Query
     {
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.id', 'DESC')
@@ -38,6 +40,13 @@ class ProjectRepository extends ServiceEntityRepository
             ;
         }
 
-        return $query->getQuery()->getResult();
+        if ($projectFiltering && $projectFiltering->getName()) {
+            $query
+                ->andWhere('LOWER(p.name) LIKE LOWER(:name)')
+                ->setParameter('name', '%' . $projectFiltering->getName() . '%')
+            ;
+        }
+
+        return $query->getQuery();
     }
 }

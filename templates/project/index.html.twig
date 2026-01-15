@@ -3,7 +3,10 @@
 {% block title %}Projets{% endblock %}
 
 {% block body %}
+
     <h1>Liste des projets</h1>
+
+    {{ include('project/_filtering_form.html.twig') }}
 
     <table class="table table-hover text-center">
         <thead>
@@ -34,11 +37,21 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">Aucun projet</td>
+                <td colspan="6">Aucun projet</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_project_new') }}">Créer un nouveau projet</a>
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('app_project_new') }}">Créer un nouveau projet</a>
+        </div>
+        <div class="col">
+            <div class="navigation">
+                {{ knp_pagination_render(projects) }}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
