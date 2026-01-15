@@ -13,6 +13,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    const ROLE_USER = 'ROLE_USER';
+
     /**
      * Identifiant unique de l'utilisateur.
      *
@@ -142,6 +146,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Retourne les libellés des rôles associés à l'utilisateur.
+     *
+     * @return array
+     */
+    public function getRolesLibelled(): array
+    {
+        $roles = $this->getRoles();
+
+        return array_map(function($role) {
+            return match ($role) {
+                self::ROLE_ADMIN => 'Administrateur',
+                self::ROLE_USER => 'Utilisateur',
+            };
+        }, $roles);
+    }
+
+    /**
      * Initialise les rôles associés à l'utilisateur et retourne l'utilisateur.
      *
      * @param list<string> $roles
@@ -240,6 +261,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastname = $lastname;
 
         return $this;
+    }
+
+    /**
+     * Retourne le nom complet de l'utilisateur.
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return "{$this->firstname} {$this->lastname}";
     }
 
     /**

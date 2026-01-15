@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.firstname) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.lastname) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.email) }}
+        </div>
+    </div>
+    {% if form.password is defined %}
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.password) }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.roles) }}
+        </div>
+    </div>
+    <a type="button" class="btn btn-secondary" href="{{ path('app_admin_user_index') }}">Retour à la liste</a>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}
