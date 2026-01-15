@@ -2,12 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ProjectFiltering;
 use App\Entity\User;
+use App\Entity\UserFiltering;
+use App\Form\UserFilteringForm;
 use App\Form\UserForm;
 use App\Form\UserPasswordForm;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +26,28 @@ class UserController extends AbstractController
      * Listing des utilisateurs.
      *
      * @param UserRepository $userRepository
+     * @param PaginatorInterface $paginator
+     * @param Request $request
      *
      * @return Response
      */
     #[Route(name: 'app_admin_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $userFiltering = new UserFiltering();
+        $userFilteringForm  = $this->createForm(UserFilteringForm::class, $userFiltering);
+        $userFilteringForm->handleRequest($request);
+
+        $users = $paginator->paginate(
+            $userRepository->findAllPaginated($userFiltering),
+            $request->query->getInt('page', 1),
+        );
+
+        $users->setCustomParameters(['align' => 'right']);
+
         return $this->render('admin/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
+            'form' => $userFilteringForm
         ]);
     }
 
