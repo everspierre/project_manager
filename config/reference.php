@@ -264,7 +264,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         formats?: array<string, string|list<scalar|null|Param>>,
  *     },
  *     assets?: bool|array{ // Assets configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         strict_mode?: bool|Param, // Throw an exception if an entry is missing from the manifest.json. // Default: false
  *         version_strategy?: scalar|null|Param, // Default: null
  *         version?: scalar|null|Param, // Default: null
@@ -1292,6 +1292,20 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     }>,
  *     role_hierarchy?: array<string, string|list<scalar|null|Param>>,
  * }
+ * @psalm-type WebpackEncoreConfig = array{
+ *     output_path: scalar|null|Param, // The path where Encore is building the assets - i.e. Encore.setOutputPath()
+ *     crossorigin?: false|"anonymous"|"use-credentials"|Param, // crossorigin value when Encore.enableIntegrityHashes() is used, can be false (default), anonymous or use-credentials // Default: false
+ *     preload?: bool|Param, // preload all rendered script and link tags automatically via the http2 Link header. // Default: false
+ *     cache?: bool|Param, // Enable caching of the entry point file(s) // Default: false
+ *     strict_mode?: bool|Param, // Throw an exception if the entrypoints.json file is missing or an entry is missing from the data // Default: true
+ *     builds?: array<string, scalar|null|Param>,
+ *     script_attributes?: array<string, scalar|null|Param>,
+ *     link_attributes?: array<string, scalar|null|Param>,
+ * }
+ * @psalm-type StimulusConfig = array{
+ *     controller_paths?: list<scalar|null|Param>,
+ *     controllers_json?: scalar|null|Param, // Default: "%kernel.project_dir%/assets/controllers.json"
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1301,6 +1315,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     twig?: TwigConfig,
  *     security?: SecurityConfig,
+ *     webpack_encore?: WebpackEncoreConfig,
+ *     stimulus?: StimulusConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1311,6 +1327,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         maker?: MakerConfig,
  *         twig?: TwigConfig,
  *         security?: SecurityConfig,
+ *         webpack_encore?: WebpackEncoreConfig,
+ *         stimulus?: StimulusConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1321,6 +1339,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         twig?: TwigConfig,
  *         security?: SecurityConfig,
+ *         webpack_encore?: WebpackEncoreConfig,
+ *         stimulus?: StimulusConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1331,6 +1351,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         twig?: TwigConfig,
  *         security?: SecurityConfig,
+ *         webpack_encore?: WebpackEncoreConfig,
+ *         stimulus?: StimulusConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

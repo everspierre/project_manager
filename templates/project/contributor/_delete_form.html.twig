@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_project_delete_contributor', {'id': project.id, 'user_id': contributor.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le contributeur {{ contributor.email }} ?');">
+<form class="d-inline" method="post" action="{{ path('app_project_delete_contributor', {'id': project.id, 'user_id': contributor.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le contributeur {{ contributor.email }} ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
-    <button class="btn">Supprimer</button>
+    <button class="{{ class|default('btn') }}">{{ text ?? '<i class="bi bi-trash text-danger"></i>' }}</button>
 </form>

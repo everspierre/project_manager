@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Projet</h1>
 
-    <table class="table">
+    <table class="table table-hover text-left">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -26,17 +26,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_project_index') }}">Retour à la liste</a>
-
-    {% if is_granted('edit', project) %}
-        <a href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
-
-        {{ include('project/_delete_form.html.twig') }}
-    {% endif %}
-
     <h1>Liste des tâches</h1>
 
-    <table class="table">
+    <table class="table table-hover text-center">
         <thead>
         <tr>
             <th>Id</th>
@@ -56,8 +48,9 @@
                 <td>{{ task.startingDate ? task.startingDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ task.endingDate ? task.endingDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_task_show', {'id': task.id}) }}">Voir</a>
-                    <a href="{{ path('app_task_edit', {'id': task.id}) }}">Mettre à jour</a>
+                    <a class="btn" href="{{ path('app_task_show', {'id': task.id}) }}"><i class="bi bi-eye"></i></a>
+                    <a class="btn" href="{{ path('app_task_edit', {'id': task.id}) }}"><i class="bi bi-pencil"></i></a>
+                    {{ include('task/_delete_form.html.twig', {'class': 'btn'}) }}
                 </td>
             </tr>
         {% else %}
@@ -73,7 +66,7 @@
 
     <h1>Liste des contributeurs</h1>
 
-    <table class="table">
+    <table class="table table-hover text-center">
         <thead>
         <tr>
             <th>Id</th>
@@ -91,7 +84,7 @@
                 <td>{{ contributor.lastname }}</td>
                 <td>{{ contributor.email }}</td>
                 {% if project.owner.id != contributor.id and is_granted('edit', project) %}
-                    <th>{% include 'project/contributor/_delete_form.html.twig' with {'contributor': contributor} %}</th>
+                    <th>{% include 'project/contributor/_delete_form.html.twig' with {'contributor': contributor, 'class': 'btn'} %}</th>
                 {% else %}
                     <th></th>
                 {% endif %}
@@ -103,5 +96,13 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <a type="button" class="btn btn-secondary" href="{{ path('app_project_index') }}">Retour à la liste</a>
+
+    {% if is_granted('edit', project) %}
+        <a type="button" class="btn btn-primary"  href="{{ path('app_project_edit', {'id': project.id}) }}">Mettre à jour</a>
+
+        {{ include('project/_delete_form.html.twig', {'class': 'btn btn-danger', 'text': 'Supprimer'}) }}
+    {% endif %}
 
 {% endblock %}
