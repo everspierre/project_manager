@@ -24,7 +24,7 @@ class ProjectRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findByUser(): array
+    public function findByUser(): Query
     {
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.id', 'DESC')
@@ -38,6 +38,6 @@ class ProjectRepository extends ServiceEntityRepository
             ;
         }
 
-        return $query->getQuery()->getResult();
+        return $query->getQuery();
     }
 }

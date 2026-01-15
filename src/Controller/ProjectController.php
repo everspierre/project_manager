@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,14 +23,23 @@ final class ProjectController extends AbstractController
      * Listing des projets.
      *
      * @param ProjectRepository $projectRepository
+     * @param PaginatorInterface $paginator
+     * @param Request $request
      *
      * @return Response
      */
     #[Route(name: 'app_project_index', methods: ['GET'])]
-    public function index(ProjectRepository $projectRepository): Response
+    public function index(ProjectRepository $projectRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $projects = $paginator->paginate(
+            $projectRepository->findByUser(),
+            $request->query->getInt('page', 1),
+        );
+
+        $projects->setCustomParameters(['align' => 'right']);
+
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findByUser(),
+            'projects' => $projects,
         ]);
     }
 
