@@ -7,7 +7,4 @@
 
     {{ include('task/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au projet</a>
-
-    {{ include('task/_delete_form.html.twig') }}
 {% endblock %}

@@ -34,9 +34,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au projet</a>
+    <a class="btn btn-secondary" href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au projet</a>
 
-    <a href="{{ path('app_task_edit', {'id': task.id}) }}">Mettre à jour</a>
+    <a class="btn btn-primary" href="{{ path('app_task_edit', {'id': task.id}) }}">Mettre à jour</a>
 
-    {{ include('task/_delete_form.html.twig') }}
+    {{ include('task/_delete_form.html.twig', { 'class': 'btn btn-danger', 'text': 'Supprimer' }) }}
 {% endblock %}

@@ -68,8 +68,8 @@ class TaskVoter extends Voter
         }
 
         return match($attribute) {
-            self::VIEW => $this->canView($task, $user),
-            self::EDIT => $this->canEdit($task, $user, $vote),
+            self::VIEW => $this->canView($subject, $user),
+            self::EDIT => $this->canEdit($subject, $user, $vote),
             default => throw new \LogicException('This code should not be reached!')
         };
     }
