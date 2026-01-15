@@ -1,4 +1,9 @@
-import './bootstrap.js';/*
+import './bootstrap.js';
+
+const $ = require('jquery');
+require('bootstrap');
+
+/*
 
  * Welcome to your app's main JavaScript file!
  *
