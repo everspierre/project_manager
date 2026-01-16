@@ -8,8 +8,8 @@
 
     {{ include('project/_filtering_form.html.twig') }}
 
-    <table class="table table-hover text-center">
-        <thead>
+    <table class="table table-hover table-striped align-middle">
+        <thead class="text-center align-middle">
             <tr>
                 <th>Id</th>
                 <th>Nom</th>
@@ -18,16 +18,16 @@
                 <th>Nombre de collaborateurs</th>
                 <th>Actions</th>
             </tr>
-        </thead>
+        </thead class="text-center align-middle">
         <tbody>
         {% for project in projects %}
             <tr>
-                <td>{{ project.id }}</td>
+                <td class="text-center">{{ project.id }}</td>
                 <td>{{ project.name }}</td>
-                <td>{{ project.description }}</td>
-                <td>{{ project.tasks|length }}</td>
-                <td>{{ project.contributors|length }}</td>
-                <td>
+                <td class="text-left">{{ project.description }}</td>
+                <td class="text-center">{{ project.tasks|length }}</td>
+                <td class="text-center">{{ project.contributors|length }}</td>
+                <td class="text-center col-2">
                     <a class="btn" href="{{ path('app_project_show', {'id': project.id}) }}"><i class="bi bi-eye"></i></a>
                     {% if is_granted('edit', project) %}
                         <a class="btn" href="{{ path('app_project_edit', {'id': project.id}) }}"><i class="bi bi-pencil"></i></a>
