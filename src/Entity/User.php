@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -33,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string|null
      */
     #[ORM\Column(length: 180)]
+    #[Assert\Email(
+        message: "{{ value }} n'est pas une adresse email valide.",
+    )]
     private ?string $email = null;
 
     /**
@@ -116,7 +121,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setEmail(string $email): static
     {
-        $this->email = $email;
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = $email;
+        } else {
+            throw new InvalidArgumentException(sprintf("%s n'est pas une adresse email valide.", $email));
+        }
 
         return $this;
     }
