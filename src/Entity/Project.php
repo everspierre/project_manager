@@ -50,7 +50,7 @@ class Project
      *
      * @var User|null
      */
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne(inversedBy: 'projectOwnerships')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
