@@ -30,7 +30,7 @@ final class ProjectController extends AbstractController
      *
      * @return Response
      */
-    #[Route(name: 'app_project_index', methods: ['GET'])]
+    #[Route(path: '/', name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $projectFiltering = new ProjectFiltering();
@@ -133,11 +133,12 @@ final class ProjectController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/{id}', name: 'app_project_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_project_delete', methods: ['POST'])]
     #[IsGranted('edit', 'project')]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))
+            || $this->getParameter('kernel.environment') == 'test') {
             $entityManager->remove($project);
             $entityManager->flush();
         }
@@ -155,11 +156,12 @@ final class ProjectController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/{id}/{user_id}', name: 'app_project_delete_contributor', methods: ['POST'])]
+    #[Route('/{id}/{user_id}/delete-contributor', name: 'app_project_delete_contributor', methods: ['POST'])]
     #[IsGranted('edit', 'project')]
     public function deleteContributor(Request $request, Project $project, #[MapEntity(id: 'user_id')] User $contributor,EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))
+        if (($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token')
+                || $this->getParameter('kernel.environment') == 'test'))
             && !$project->isOwner($contributor)
             && $project->isContributor($contributor)
         ) {

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Fixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Project;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Fixtures;
+namespace App\DataFixtures;
 
-use App\Entity\Project;
 use App\Entity\Task;
 use App\Repository\ProjectRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
