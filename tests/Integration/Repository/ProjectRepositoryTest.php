@@ -13,7 +13,7 @@ class ProjectRepositoryTest extends KernelTestCase
     use ResetDatabase, Factories;
 
     /**
-     * Retourne le UserRepository
+     * Retourne le ProjectRepository
      *
      * @return ProjectRepository
      */
