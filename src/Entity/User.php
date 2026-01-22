@@ -15,9 +15,20 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * Rôle administrateur.
+     */
     const ROLE_ADMIN = 'ROLE_ADMIN';
 
+    /**
+     * Rôle utilisateur.
+     */
     const ROLE_USER = 'ROLE_USER';
+
+    /**
+     * Liste des rôles.
+     */
+    const ROLES = [self::ROLE_ADMIN, self::ROLE_USER];
 
     /**
      * Identifiant unique de l'utilisateur.
