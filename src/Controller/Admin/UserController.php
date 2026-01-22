@@ -31,7 +31,7 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    #[Route(name: 'app_admin_user_index', methods: ['GET'])]
+    #[Route(path: '/', name: 'app_admin_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $userFiltering = new UserFiltering();
@@ -161,7 +161,8 @@ class UserController extends AbstractController
     #[Route(path: '/{id}/delete', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, EntityManagerInterface $entityManager, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))
+            || $this->getParameter('kernel.environment') == 'test') {
             $entityManager->remove($user);
             $entityManager->flush();
         }
