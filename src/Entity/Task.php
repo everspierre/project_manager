@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -39,19 +41,19 @@ class Task
     /**
      * Date de début de la tâche.
      *
-     * @var \DateTime|null
+     * @var DateTime|null
      */
     #[ORM\Column]
-    private ?\DateTime $startingDate = null;
+    private ?DateTime $startingDate = null;
 
     /**
      * Date de fin de la tâche.
      *
-     * @var \DateTime|null
+     * @var DateTime|null
      */
     #[ORM\Column(nullable: true)]
     #[Assert\GreaterThanOrEqual(propertyPath: 'startingDate', message: 'La date de fin doit être supérieure ou égale à la date de début')]
-    private ?\DateTime $endingDate = null;
+    private ?DateTime $endingDate = null;
 
     /**
      * Projet associé à la tâche.
@@ -123,9 +125,9 @@ class Task
     /**
      * Retourne la date de début de la tâche.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getStartingDate(): ?\DateTime
+    public function getStartingDate(): ?DateTime
     {
         return $this->startingDate;
     }
@@ -133,11 +135,11 @@ class Task
     /**
      * Initialise et retourne la date de début de la tâche.
      *
-     * @param \DateTime $startingDate
+     * @param DateTime $startingDate
      *
      * @return $this
      */
-    public function setStartingDate(\DateTime $startingDate): static
+    public function setStartingDate(DateTime $startingDate): static
     {
         $this->startingDate = $startingDate;
 
@@ -147,9 +149,9 @@ class Task
     /**
      * Retourne la date de fin de la tâche.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getEndingDate(): ?\DateTime
+    public function getEndingDate(): ?DateTime
     {
         return $this->endingDate;
     }
@@ -157,12 +159,20 @@ class Task
     /**
      * Initialise et retourne la date de fin de la tâche.
      *
-     * @param \DateTime|null $endingDate
+     * @param DateTime|null $endingDate
      *
      * @return $this
      */
-    public function setEndingDate(?\DateTime $endingDate): static
+    public function setEndingDate(?DateTime $endingDate): static
     {
+        if (is_null($this->startingDate) && !is_null($endingDate)) {
+            throw new InvalidArgumentException('Aucune date de début renseignée.');
+        }
+
+        if (!is_null($endingDate) && !is_null($this->startingDate) && $this->startingDate > $endingDate) {
+            throw new InvalidArgumentException(sprintf('La date de fin doit être supérieure ou égale à la date de début (%s).', $this->startingDate->format('d-m-Y')));
+        }
+
         $this->endingDate = $endingDate;
 
         return $this;

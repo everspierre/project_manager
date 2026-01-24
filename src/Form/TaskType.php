@@ -33,9 +33,11 @@ class TaskType extends AbstractType
                 'label' => 'Description'
             ])
             ->add('startingDate', DateType::class, [
+                'required' => true,
                 'label' => 'Date de début'
             ])
             ->add('endingDate', DateType::class, [
+                'required' => false,
                 'label' => 'Date de fin'
             ])
         ;

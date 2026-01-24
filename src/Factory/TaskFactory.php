@@ -37,8 +37,8 @@ final class TaskFactory extends PersistentObjectFactory
         return [
             'name' => self::faker()->text(50),
             'description' => self::faker()->text(255),
-            'startingDate' => self::faker()->dateTime('-3 years'),
-            'endingDate' => self::faker()->boolean() ? self::faker()->dateTime() : null,
+            'startingDate' => self::faker()->dateTimeBetween('-3 years', '-1 day'),
+            'endingDate' => self::faker()->boolean() ? self::faker()->dateTimeBetween('now', '+1 month') : null,
         ];
     }
 

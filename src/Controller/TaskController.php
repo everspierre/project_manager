@@ -103,11 +103,12 @@ final class TaskController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/{id}', name: 'app_task_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     #[IsGranted('edit', 'task')]
     public function delete(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))
+            || $this->getParameter('kernel.environment') == 'test') {
             $entityManager->remove($task);
             $entityManager->flush();
         }

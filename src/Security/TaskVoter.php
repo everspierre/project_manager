@@ -87,6 +87,8 @@ class TaskVoter extends Voter
         if ($this->canEdit($task, $user, null)) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -100,6 +102,10 @@ class TaskVoter extends Voter
      */
     public function canEdit(?Task $task, User $user, ?Vote $vote): bool
     {
+        if ($task->getProject()->isOwner($user)) {
+            return true;
+        }
+
         if ($task->getProject()->isContributor($user)) {
             return true;
         }

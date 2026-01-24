@@ -39,7 +39,7 @@ final class ProjectFactory extends PersistentObjectFactory
             'description' => self::faker()->text(255),
             'owner' => UserFactory::new(),
             'contributors' => UserFactory::new()->many(self::faker()->numberBetween(1, 5)),
-            'tasks' => TaskFactory::new()->many(self::faker()->numberBetween(0, 5)),
+            'tasks' => TaskFactory::new()->many(self::faker()->numberBetween(1, 5)),
         ];
     }
 
