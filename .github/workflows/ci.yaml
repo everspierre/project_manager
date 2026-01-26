@@ -68,7 +68,5 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                sudo systemctl start mysql.service
-                php bin/console doctrine:database:drop --env=test --if-exists --force
                 php bin/console doctrine:database:create --env=test --no-interaction
                 php bin/console doctrine:migration:migrate --no-interaction
