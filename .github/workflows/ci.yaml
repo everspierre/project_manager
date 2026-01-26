@@ -73,6 +73,8 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
+                systemctl status mysql.service
+                journalctl -xeu mysql.service
                 sudo systemctl start mysql.service
                 mysql -e 'CREATE DATABASE project_manager_test;' -uroot -proot
 
