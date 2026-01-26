@@ -15,18 +15,20 @@ jobs:
             - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
             # Installation of MySQL 8.0
-            - name: Install MySQL 8.0
-              uses: shogo82148/actions-setup-mysql@v1
+            - name: Shutdown Ubuntu MySQL (SUDO)
+              run: sudo service mysql stop
+            - name: Set up MySQL
+              uses: mirromutth/mysql-action@v1.1
               with:
-                mysql-version: "8.0"
-            - run: mysql -uroot -e 'SELECT version()'
+                  mysql version: '8.0'
+                  mysql root password: 'root'
 
             # Installation of PHP 8.3
             - name: Install PHP 8.3
               uses: shivammathur/setup-php@v2
               with:
                   php-version: "8.3"
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
+                  extensions: mbstring, xml, ctype, iconv, intl, mysqli, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
             - run: php -v
 
             # Installation of NodeJS
@@ -68,5 +70,7 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
+                sudo mysql --user=root --password=root
+                php bin/console doctrine:database:drop --env=test --if-exists --force
                 php bin/console doctrine:database:create --env=test --no-interaction
                 php bin/console doctrine:migration:migrate --no-interaction
