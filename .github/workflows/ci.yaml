@@ -34,14 +34,15 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: '14'
-            - run: npm install
-            - run: npm build
+            - run: |
+                npm install
+                npm build
 
             # Installation of Composer
             - name: Install Composer
               run: composer validate --no-check-publish
 
-            - name: Cache composer packages
+            - name: Cache Composer packages
               id: composer-cache
               uses: actions/cache@v3
               with:
@@ -53,7 +54,7 @@ jobs:
             - name: Install Dependencies
               run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-            # Configuration de Symfony
+            # Configuration of Symfony
             - name: Install Symfony CLI
               run: curl -sS https://get.symfony.com/cli/installer | bash
             - run: mv /home/runner/.symfony5/bin/symfony /usr/local/bin/symfony
@@ -63,3 +64,10 @@ jobs:
 
             - name: Check the Symfony console
               run: php bin/console about
+
+            # Set up MySQL Test Database
+            - name: Set up Database
+              run: |
+                php bin/console doctrine:database:drop --env=test --if-exists --force
+                php bin/console doctrine:database:create --env=test --no-interaction
+                php bin/console doctrine:migration:migrate --no-interaction
