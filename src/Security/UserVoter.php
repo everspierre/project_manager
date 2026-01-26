@@ -74,6 +74,8 @@ class UserVoter extends Voter
         if ($this->canEdit($user, $connectedUser, null)) {
             return true;
         }
+
+        return false;
     }
 
     /**
