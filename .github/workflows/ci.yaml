@@ -15,12 +15,6 @@ jobs:
             # Checkout Github actions
             - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-            # Set up MySQL Test Database
-            - name: Set up Database
-              run: |
-                sudo systemctl start mysql.service
-                sudo mysql --version
-
             # Installation of PHP 8.3
             - name: Install PHP 8.3
               uses: shivammathur/setup-php@v2
@@ -64,6 +58,13 @@ jobs:
 
             - name: Check the Symfony console
               run: php bin/console about
+
+            # Set up MySQL Test Database
+            - name: Set up Database
+              run: |
+                  sudo systemctl start mysql.service
+                  sudo mysql --version
+                  php bin/console doctrine:database:create --env=test
 
             # Run PHP Unit
             - name: Run PHPUnit
