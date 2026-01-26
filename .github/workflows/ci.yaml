@@ -54,7 +54,9 @@ jobs:
               run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
             # Configuration de Symfony
-            - run: curl -sS https://get.symfony.com/cli/installer | bash
+            - name: Install Symfony CLI
+              run: curl -sS https://get.symfony.com/cli/installer | bash
+            - run: mv /home/runner/.symfony5/bin/symfony /usr/local/bin/symfony
 
             - name: Check Symfony requirements
               run: symfony check:requirements
