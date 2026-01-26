@@ -73,9 +73,8 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                php bin/console doctrine:database:drop --env=test --if-exists --force
-                php bin/console doctrine:database:create --env=test --no-interaction
-                php bin/console doctrine:migration:migrate --no-interaction
+                sudo /etc/init.d/mysql start
+                mysql -e 'CREATE DATABASE project_manager_test;' -uroot -proot
 
             # Run PHP Unit
             - name: Run PHPUnit
