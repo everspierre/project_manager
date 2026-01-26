@@ -10,18 +10,22 @@ on: [push, pull_request]
 jobs:
     test:
         runs-on: ubuntu-24.04
+
+        # Installation of MySQL 8.0
+        services:
+            mysql:
+                image: mysql:8.0
+                ports:
+                    - 3306:3306
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_USER: root
+                    MYSQL_PASSWORD: root
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_USER=test -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=example_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+
         steps:
             # Checkout Github actions
             - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-            # Installation of MySQL 8.0
-            - name: Shutdown Ubuntu MySQL (SUDO)
-              run: sudo service mysql stop
-            - name: Set up MySQL
-              uses: mirromutth/mysql-action@v1.1
-              with:
-                  mysql version: '8.0'
-                  mysql root password: 'root'
 
             # Installation of PHP 8.3
             - name: Install PHP 8.3
@@ -70,8 +74,6 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                systemctl status mysql.service
-                sudo systemctl start mysql
                 systemctl status mysql.service
                 php bin/console doctrine:database:drop --env=test --if-exists --force
                 php bin/console doctrine:database:create --env=test --no-interaction
