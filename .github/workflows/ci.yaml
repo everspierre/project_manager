@@ -68,4 +68,4 @@ jobs:
 
             # Run PHP Unit
             - name: Run PHPUnit
-              run: php bin/console
+              run: php bin/phpunit --testdox
