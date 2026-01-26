@@ -39,7 +39,7 @@ jobs:
 
             # Installation of Composer
             - name: Install Composer
-              run: composer validate
+              run: composer validate --no-check-publish
 
             - name: Cache composer packages
               id: composer-cache
