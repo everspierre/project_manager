@@ -72,7 +72,7 @@ jobs:
             - name: Run PHPStan
               uses: php-actions/phpstan@v3
               with:
-                  path: /src /tests
+                  path: src tests
 
             # Run PHP Unit
             - name: Run PHPUnit
