@@ -2,6 +2,9 @@
 
 name: CI Pipeline
 
+permissions:
+    contents: read
+
 on: [push, pull_request]
 
 jobs:
