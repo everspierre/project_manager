@@ -73,7 +73,7 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                sudo /etc/init.d/mysql start
+                sudo systemctl start mysql.service
                 mysql -e 'CREATE DATABASE project_manager_test;' -uroot -proot
 
             # Run PHP Unit
