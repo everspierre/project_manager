@@ -30,7 +30,8 @@ jobs:
                   node-version: '14'
             - run: |
                 npm install
-                npm run build
+                npm build
+                npm run dev
 
             # Installation of Composer
             - name: Install Composer
