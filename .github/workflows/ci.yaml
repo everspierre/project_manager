@@ -1,0 +1,61 @@
+# Continuous Integration
+
+name: CI Pipeline
+
+permissions:
+    contents: read
+
+on: [push, pull_request]
+
+jobs:
+    test:
+        runs-on: ubuntu-24.04
+        steps:
+            # Checkout Github actions
+            - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+            # Installation of MySQL 8.0
+            - name: Install MySQL 8.0
+              uses: shogo82148/actions-setup-mysql@v1
+              with:
+                mysql-version: "8.0"
+            - run: mysql -uroot -e 'SELECT version()'
+
+            # Installation of PHP 8.3
+            - name: Install PHP 8.3
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
+            - run: php -v
+
+            # Installation of NodeJS
+            - name: Install NodeJS
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '14'
+            - run: npm install
+            - run: npm build
+
+            # Installation of Composer
+            - name: Install Composer
+              run: composer validate
+
+            - name: Cache composer packages
+              id: composer-cache
+              uses: actions/cache@v3
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+
+            - name: Install Dependencies
+              run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+            # Configuration de Symfony
+            - name: Check Symfony requirements
+              run: vendor/bin/requirements-checker
+
+            - name: Check the Symfony console
+              run: bin/console about
