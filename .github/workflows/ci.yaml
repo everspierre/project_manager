@@ -19,6 +19,7 @@ jobs:
               uses: shogo82148/actions-setup-mysql@v1
               with:
                 mysql-version: "8.0"
+                my-cnf: root-password=root
             - run: mysql -uroot -e 'SELECT version()'
 
             # Installation of PHP 8.3
