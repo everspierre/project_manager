@@ -19,6 +19,7 @@ jobs:
                     - 3306:3306
                 env:
                     MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: project_manager_test
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
@@ -72,7 +73,6 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                sudo service mysql status
                 php bin/console doctrine:database:drop --env=test --if-exists --force
                 php bin/console doctrine:database:create --env=test --no-interaction
                 php bin/console doctrine:migration:migrate --no-interaction
