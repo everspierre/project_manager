@@ -30,7 +30,7 @@ jobs:
                   node-version: 16
             - uses: actions/download-artifact@v4
               with:
-                name: webpack artifacts
+                name: webpack
                 path: public
             - run: |
                 npm install
