@@ -70,7 +70,13 @@ jobs:
             # Set up MySQL Test Database
             - name: Set up Database
               run: |
-                sudo mysql --user=root --password=root
+                systemctl status mysql.service
+                sudo systemctl start mysql
+                systemctl status mysql.service
                 php bin/console doctrine:database:drop --env=test --if-exists --force
                 php bin/console doctrine:database:create --env=test --no-interaction
                 php bin/console doctrine:migration:migrate --no-interaction
+
+            # Run PHP Unit
+            - name: Run PHPUnit
+              run: php bin/console
