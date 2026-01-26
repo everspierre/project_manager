@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\ProjectFiltering;
 use App\Entity\User;
 use App\Entity\UserFiltering;
 use App\Form\UserFilteringForm;
@@ -10,7 +9,6 @@ use App\Form\UserForm;
 use App\Form\UserPasswordForm;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,23 +17,17 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/user')]
-#[IsGranted("ROLE_ADMIN")]
+#[IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
     /**
      * Listing des utilisateurs.
-     *
-     * @param UserRepository $userRepository
-     * @param PaginatorInterface $paginator
-     * @param Request $request
-     *
-     * @return Response
      */
     #[Route(path: '/', name: 'app_admin_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $userFiltering = new UserFiltering();
-        $userFilteringForm  = $this->createForm(UserFilteringForm::class, $userFiltering);
+        $userFilteringForm = $this->createForm(UserFilteringForm::class, $userFiltering);
         $userFilteringForm->handleRequest($request);
 
         $users = $paginator->paginate(
@@ -47,17 +39,12 @@ class UserController extends AbstractController
 
         return $this->render('admin/user/index.html.twig', [
             'users' => $users,
-            'form' => $userFilteringForm
+            'form' => $userFilteringForm,
         ]);
     }
 
     /**
      * Création d'un nouvel utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route(path: '/new', name: 'app_admin_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -71,7 +58,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_user_index', [],  Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/user/new.html.twig', [
@@ -82,10 +69,6 @@ class UserController extends AbstractController
 
     /**
      * Visualisation d'un utilisateur.
-     *
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/show', name: 'app_admin_user_show', methods: ['GET'])]
     public function show(User $user): Response
@@ -97,12 +80,6 @@ class UserController extends AbstractController
 
     /**
      * Mise à jour d'un utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/edit', name: 'app_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, User $user): Response
@@ -113,7 +90,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()],  Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/user/edit.html.twig', [
@@ -124,12 +101,6 @@ class UserController extends AbstractController
 
     /**
      * Mise à jour du mot de passe de l'utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/edit-password', name: 'app_admin_user_edit_password', methods: ['GET', 'POST'])]
     public function editPassword(Request $request, EntityManagerInterface $entityManager, User $user): Response
@@ -140,7 +111,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()],  Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/user/edit_password.html.twig', [
@@ -151,23 +122,16 @@ class UserController extends AbstractController
 
     /**
      * Suppression d'un utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/delete', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, EntityManagerInterface $entityManager, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))
-            || $this->getParameter('kernel.environment') == 'test') {
+            || 'test' == $this->getParameter('kernel.environment')) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
-
 }

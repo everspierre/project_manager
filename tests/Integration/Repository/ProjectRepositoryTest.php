@@ -10,12 +10,11 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProjectRepositoryTest extends KernelTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
-     * Retourne le ProjectRepository
-     *
-     * @return ProjectRepository
+     * Retourne le ProjectRepository.
      */
     private function getProjectRepository(): ProjectRepository
     {
@@ -24,8 +23,6 @@ class ProjectRepositoryTest extends KernelTestCase
 
     /**
      * Test la création de plusieurs projets.
-     *
-     * @return void
      */
     public function testProjectsAreCreated(): void
     {
@@ -35,5 +32,4 @@ class ProjectRepositoryTest extends KernelTestCase
 
         $this->assertSame(5, $this->getProjectRepository()->count());
     }
-
 }

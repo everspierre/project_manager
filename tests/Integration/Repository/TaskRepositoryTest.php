@@ -9,12 +9,11 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TaskRepositoryTest extends KernelTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
      * Test la création de plusieurs tâches.
-     *
-     * @return void
      */
     public function testTasksAreCreated(): void
     {
@@ -24,5 +23,4 @@ class TaskRepositoryTest extends KernelTestCase
 
         $this->assertNotEquals(0, $project->getTasks()->count());
     }
-
 }

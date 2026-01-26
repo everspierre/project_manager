@@ -23,12 +23,6 @@ final class ProjectController extends AbstractController
 {
     /**
      * Listing des projets.
-     *
-     * @param ProjectRepository $projectRepository
-     * @param PaginatorInterface $paginator
-     * @param Request $request
-     *
-     * @return Response
      */
     #[Route(path: '/', name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository, PaginatorInterface $paginator, Request $request): Response
@@ -46,17 +40,12 @@ final class ProjectController extends AbstractController
 
         return $this->render('project/index.html.twig', [
             'projects' => $projects,
-            'form' => $projectFilteringForm
+            'form' => $projectFilteringForm,
         ]);
     }
 
     /**
      * Création d'un projet.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -82,10 +71,6 @@ final class ProjectController extends AbstractController
 
     /**
      * Détail d'un projet.
-     *
-     * @param Project $project
-     *
-     * @return Response
      */
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     #[IsGranted('view', 'project')]
@@ -98,12 +83,6 @@ final class ProjectController extends AbstractController
 
     /**
      * Mise à jour d'un projet.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'project')]
@@ -126,19 +105,13 @@ final class ProjectController extends AbstractController
 
     /**
      * Suppression d'un projet.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/{id}/delete', name: 'app_project_delete', methods: ['POST'])]
     #[IsGranted('edit', 'project')]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))
-            || $this->getParameter('kernel.environment') == 'test') {
+            || 'test' == $this->getParameter('kernel.environment')) {
             $entityManager->remove($project);
             $entityManager->flush();
         }
@@ -148,20 +121,13 @@ final class ProjectController extends AbstractController
 
     /**
      * Suppression d'un contributeur.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @param User $contributor
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/{id}/{user_id}/delete-contributor', name: 'app_project_delete_contributor', methods: ['POST'])]
     #[IsGranted('edit', 'project')]
-    public function deleteContributor(Request $request, Project $project, #[MapEntity(id: 'user_id')] User $contributor,EntityManagerInterface $entityManager): Response
+    public function deleteContributor(Request $request, Project $project, #[MapEntity(id: 'user_id')] User $contributor, EntityManagerInterface $entityManager): Response
     {
-        if (($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token')
-                || $this->getParameter('kernel.environment') == 'test'))
+        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token')
+                || 'test' == $this->getParameter('kernel.environment'))
             && !$project->isOwner($contributor)
             && $project->isContributor($contributor)
         ) {

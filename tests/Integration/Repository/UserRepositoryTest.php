@@ -10,12 +10,11 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserRepositoryTest extends KernelTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
-     * Retourne le UserRepository
-     *
-     * @return UserRepository
+     * Retourne le UserRepository.
      */
     private function getUserRepository(): UserRepository
     {
@@ -24,8 +23,6 @@ class UserRepositoryTest extends KernelTestCase
 
     /**
      * Test la création de plusieurs utilisateurs.
-     *
-     * @return void
      */
     public function testUsersAreCreated(): void
     {
@@ -35,5 +32,4 @@ class UserRepositoryTest extends KernelTestCase
 
         $this->assertSame(5, $this->getUserRepository()->count());
     }
-
 }

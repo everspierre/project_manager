@@ -24,9 +24,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
-     *
-     * @param PasswordAuthenticatedUserInterface $user
-     * @param string $newHashedPassword
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
@@ -41,10 +38,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * Retourne les utilisateurs.
-     *
-     * @param UserFiltering|null $userFiltering
-     *
-     * @return Query
      */
     public function findAllPaginated(?UserFiltering $userFiltering): Query
     {
@@ -56,25 +49,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             if ($userFiltering && $userFiltering->getFirstname()) {
                 $query
                     ->andWhere('LOWER(u.firstname) LIKE LOWER(:firstname)')
-                    ->setParameter('firstname', '%' . $userFiltering->getFirstname() . '%')
+                    ->setParameter('firstname', '%'.$userFiltering->getFirstname().'%')
                 ;
             }
             if ($userFiltering && $userFiltering->getLastname()) {
                 $query
                     ->andWhere('LOWER(u.lastname) LIKE LOWER(:lastname)')
-                    ->setParameter('lastname', '%' . $userFiltering->getLastname() . '%')
+                    ->setParameter('lastname', '%'.$userFiltering->getLastname().'%')
                 ;
             }
             if ($userFiltering && $userFiltering->getEmail()) {
                 $query
                     ->andWhere('LOWER(u.email) LIKE LOWER(:email)')
-                    ->setParameter('email', '%' . $userFiltering->getEmail() . '%')
+                    ->setParameter('email', '%'.$userFiltering->getEmail().'%')
                 ;
             }
             if ($userFiltering && $userFiltering->getRole()) {
                 $query
                     ->andWhere('u.roles LIKE :role')
-                    ->setParameter('role', '%' . $userFiltering->getRole() . '%')
+                    ->setParameter('role', '%'.$userFiltering->getRole().'%')
                 ;
             }
         }

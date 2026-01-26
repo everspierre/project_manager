@@ -13,24 +13,21 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserControllerTest extends WebTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
      * Création d'un utilisateur.
-     *
-     * @return User
      */
     private function createUser(): User
     {
         return UserFactory::createOne([
-            'email' => 'user@project.com'
+            'email' => 'user@project.com',
         ]);
     }
 
     /**
      * Retourne le UserRepository.
-     *
-     * @return UserRepository
      */
     private function getUserRepository(): UserRepository
     {
@@ -39,8 +36,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur peut visualiser son profil.
-     *
-     * @return void
      */
     public function testUserCanShowItself(): void
     {
@@ -56,8 +51,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur peut modifier son profil.
-     *
-     * @return void
      */
     public function testUserCanEditItself(): void
     {

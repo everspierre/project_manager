@@ -12,11 +12,6 @@ class UserPasswordForm extends AbstractType
 {
     /**
      * Initialise les composants du formulaire.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     *
-     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,7 +21,7 @@ class UserPasswordForm extends AbstractType
                 'invalid_message' => 'Les mots de passe doivent être identiques',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Nouveau mot de passe'],
+                'first_options' => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Répéter le mot de passe'],
             ])
         ;
@@ -34,13 +29,8 @@ class UserPasswordForm extends AbstractType
 
     /**
      * Initialise la configuration du formulaire.
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-
     }
 }

@@ -14,16 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user')]
-#[IsGranted("ROLE_USER")]
+#[IsGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
-
     /**
      * Visualisation d'un utilisateur.
-     *
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/show', name: 'app_user_show', methods: ['GET'])]
     #[IsGranted('view', 'user')]
@@ -36,12 +31,6 @@ class UserController extends AbstractController
 
     /**
      * Mise à jour d'un utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'user')]
@@ -57,7 +46,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home', [],  Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -68,13 +57,6 @@ class UserController extends AbstractController
 
     /**
      * Mise à jour du mot de passe de l'utilisateur.
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param UserPasswordHasherInterface $passwordHasher
-     * @param User $user
-     *
-     * @return Response
      */
     #[Route(path: '/{id}/edit-password', name: 'app_user_edit_password', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'user')]
@@ -88,7 +70,7 @@ class UserController extends AbstractController
             $user->setPassword($hashedPassword);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home', [],  Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit_password.html.twig', [
@@ -96,5 +78,4 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-
 }

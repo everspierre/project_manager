@@ -10,8 +10,6 @@ class HomeController extends AbstractController
 {
     /**
      * Redirection vers le listing des projets.
-     *
-     * @return Response
      */
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(): Response

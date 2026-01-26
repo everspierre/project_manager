@@ -17,12 +17,11 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TaskControllerTest extends WebTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
      * Création d'une tâche.
-     *
-     * @return Task
      */
     public function createTask(): Task
     {
@@ -31,8 +30,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Création d'un projet.
-     *
-     * @return Project
      */
     private function createProject(): Project
     {
@@ -41,8 +38,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Création d'un utilisateur.
-     *
-     * @return User
      */
     private function createUser(): User
     {
@@ -54,8 +49,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Création d'un administrateur.
-     *
-     * @return User
      */
     private function createAdmin(): User
     {
@@ -67,8 +60,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Retourne le TaskRepository.
-     *
-     * @return TaskRepository
      */
     private function getTaskRepository(): TaskRepository
     {
@@ -77,8 +68,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur n'étant pas sur le projet ne peut créer une tâche.
-     *
-     * @return void
      */
     public function testUserCannotCreate(): void
     {
@@ -92,8 +81,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut créer une tâche à un projet.
-     *
-     * @return void
      */
     public function testAdminCanCreate(): void
     {
@@ -106,15 +93,13 @@ class TaskControllerTest extends WebTestCase
             'task[name]' => Factory::create()->sentence(),
             'task[description]' => Factory::create()->text(),
             'task[startingDate]' => Factory::create()->dateTime()->format('Y-m-d'),
-            'task[endingDate]' => ''
+            'task[endingDate]' => '',
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un propriétaire peut créer une tâche à un projet.
-     *
-     * @return void
      */
     public function testOwnerCanCreate(): void
     {
@@ -126,15 +111,13 @@ class TaskControllerTest extends WebTestCase
             'task[name]' => Factory::create()->sentence(),
             'task[description]' => Factory::create()->text(),
             'task[startingDate]' => Factory::create()->dateTime()->format('Y-m-d'),
-            'task[endingDate]' => ''
+            'task[endingDate]' => '',
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un contributeur peut créer une tâche à un projet.
-     *
-     * @return void
      */
     public function testContributorCanCreate(): void
     {
@@ -146,15 +129,13 @@ class TaskControllerTest extends WebTestCase
             'task[name]' => Factory::create()->sentence(),
             'task[description]' => Factory::create()->text(),
             'task[startingDate]' => Factory::create()->dateTime()->format('Y-m-d'),
-            'task[endingDate]' => ''
+            'task[endingDate]' => '',
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un utilisateur n'étant pas sur le projet ne peut visualiser une tâche.
-     *
-     * @return void
      */
     public function testUserCannotShow(): void
     {
@@ -168,8 +149,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut visualiser une tâche à un projet.
-     *
-     * @return void
      */
     public function testAdminCanShow(): void
     {
@@ -183,8 +162,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un propriétaire peut visualiser une tâche à un projet.
-     *
-     * @return void
      */
     public function testOwnerCanShow(): void
     {
@@ -197,8 +174,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur peut visualiser une tâche à un projet.
-     *
-     * @return void
      */
     public function testContributorCanShow(): void
     {
@@ -211,8 +186,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ne peut pas modifier une tâche d'un projet.
-     *
-     * @return void
      */
     public function testUserCannotEdit(): void
     {
@@ -226,8 +199,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut modifier une tâche d'un projet.
-     *
-     * @return void
      */
     public function testAdminCanEdit(): void
     {
@@ -238,7 +209,7 @@ class TaskControllerTest extends WebTestCase
         $client->request('GET', "/task/{$project->getTasks()->first()->getId()}/edit");
         $newName = Factory::create()->sentence();
         $client->submitForm('Enregistrer', [
-            'task[name]' => $newName
+            'task[name]' => $newName,
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
         $this->assertSame($newName, $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId())->getName());
@@ -246,8 +217,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un propriétaire peut modifier une tâche d'un projet.
-     *
-     * @return void
      */
     public function testOwnerCanEdit(): void
     {
@@ -257,7 +226,7 @@ class TaskControllerTest extends WebTestCase
         $client->request('GET', "/task/{$project->getTasks()->first()->getId()}/edit");
         $newName = Factory::create()->sentence();
         $client->submitForm('Enregistrer', [
-            'task[name]' => $newName
+            'task[name]' => $newName,
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
         $this->assertSame($newName, $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId())->getName());
@@ -265,8 +234,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur peut modifier une tâche d'un projet.
-     *
-     * @return void
      */
     public function testContributorCanEdit(): void
     {
@@ -276,7 +243,7 @@ class TaskControllerTest extends WebTestCase
         $client->request('GET', "/task/{$project->getTasks()->first()->getId()}/edit");
         $newName = Factory::create()->sentence();
         $client->submitForm('Enregistrer', [
-            'task[name]' => $newName
+            'task[name]' => $newName,
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
         $this->assertSame($newName, $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId())->getName());
@@ -284,8 +251,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur n'étant pas sur le projet ne peut pas supprimer une tâche.
-     *
-     * @return void
      */
     public function testUserCannotDelete(): void
     {
@@ -299,8 +264,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut supprimer une tâche à un projet.
-     *
-     * @return void
      */
     public function testAdminCanDelete(): void
     {
@@ -314,8 +277,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un propriétaire peut supprimer une tâche à un projet.
-     *
-     * @return void
      */
     public function testOwnerCanDelete(): void
     {
@@ -328,8 +289,6 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur peut supprimer une tâche à un projet.
-     *
-     * @return void
      */
     public function testContributorCanDelete(): void
     {
@@ -339,5 +298,4 @@ class TaskControllerTest extends WebTestCase
         $client->request('POST', "/task/{$project->getTasks()->first()->getId()}/delete");
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
     }
-
 }
