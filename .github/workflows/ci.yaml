@@ -11,20 +11,15 @@ jobs:
     test:
         runs-on: ubuntu-latest
 
-        # Installation of MySQL 8.0
-        services:
-            mysql:
-                image: mysql:8.0
-                ports:
-                    - 3306:3306
-                env:
-                    MYSQL_ROOT_PASSWORD: root
-                    MYSQL_DATABASE: project_manager_test
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
         steps:
             # Checkout Github actions
             - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+            # Set up MySQL Test Database
+            - name: Set up Database
+              run: |
+                sudo systemctl start mysql.service
+                sudo mysql --version
 
             # Installation of PHP 8.3
             - name: Install PHP 8.3
@@ -69,14 +64,6 @@ jobs:
 
             - name: Check the Symfony console
               run: php bin/console about
-
-            # Set up MySQL Test Database
-            - name: Set up Database
-              run: |
-                systemctl status mysql.service
-                journalctl -xeu mysql.service
-                sudo systemctl start mysql.service
-                mysql -e 'CREATE DATABASE project_manager_test;' -uroot -proot
 
             # Run PHP Unit
             - name: Run PHPUnit
