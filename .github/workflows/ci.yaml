@@ -70,9 +70,11 @@ jobs:
 
             # Run PHP Stan
             - name: Run PHPStan
-              uses: php-actions/phpstan@v3
-              with:
-                  path: src tests
+              run: php vendor/bin/phpstan analyse src tests
+
+            # Run PHP CS Fixer
+            - name: Run PHP-CS-Fixer
+              run: php vendor/bin/php-cs-fixer check -v
 
             # Run PHP Unit
             - name: Run PHPUnit
