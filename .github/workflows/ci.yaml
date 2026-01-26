@@ -62,4 +62,4 @@ jobs:
               run: symfony check:requirements
 
             - name: Check the Symfony console
-              run: bin/console about
+              run: php bin/console about
