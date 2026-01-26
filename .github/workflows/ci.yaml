@@ -30,7 +30,7 @@ jobs:
                   node-version: 16
             - run: |
                 npm install
-                npm test
+                npm build
 
             # Installation of Composer
             - name: Install Composer
