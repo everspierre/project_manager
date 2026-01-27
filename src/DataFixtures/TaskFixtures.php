@@ -31,6 +31,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                 $task->setDescription($faker->text());
                 $task->setStartingDate($faker->dateTimeBetween('-3 years', 'now'));
                 $task->setEndingDate($faker->dateTimeBetween($task->getStartingDate(), '+3 months'));
+                $task->setState($faker->randomElement(Task::STATES));
                 $task->setProject($project);
                 $manager->persist($task);
             }

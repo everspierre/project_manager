@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,6 +35,20 @@ class TaskType extends AbstractType
                 'label' => 'Date de fin',
             ])
         ;
+
+        if (!$options['disable_state']) {
+            $builder->add('state', ChoiceType::class, [
+                'required' => true,
+                'label' => 'Statut',
+                'choices' => [
+                    'En attente' => Task::STATE_WAITING,
+                    'En cours' => Task::STATE_RUNNING,
+                    'Terminée' => Task::STATE_COMPLETED,
+                    'Annulée' => Task::STATE_CANCELLED,
+                    'Supprimée' => Task::STATE_REMOVED,
+                ],
+            ]);
+        }
     }
 
     /**
@@ -43,6 +58,9 @@ class TaskType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
+            'disable_state' => false,
         ]);
+
+        $resolver->setAllowedTypes('disable_state', 'bool');
     }
 }

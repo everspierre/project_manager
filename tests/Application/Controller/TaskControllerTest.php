@@ -273,6 +273,8 @@ class TaskControllerTest extends WebTestCase
         $project = $this->createProject();
         $client->request('POST', "/task/{$project->getTasks()->first()->getId()}/delete");
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
+        $task = $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId());
+        $this->assertSame(Task::STATE_REMOVED, $task->getState());
     }
 
     /**
@@ -285,6 +287,8 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($project->getOwner());
         $client->request('POST', "/task/{$project->getTasks()->first()->getId()}/delete");
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
+        $task = $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId());
+        $this->assertSame(Task::STATE_REMOVED, $task->getState());
     }
 
     /**
@@ -297,5 +301,7 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($project->getContributors()->first());
         $client->request('POST', "/task/{$project->getTasks()->first()->getId()}/delete");
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
+        $task = $this->getTaskRepository()->findOneById($project->getTasks()->first()->getId());
+        $this->assertSame(Task::STATE_REMOVED, $task->getState());
     }
 }

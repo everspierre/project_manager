@@ -19,6 +19,13 @@
             {{ form_row(form.endingDate) }}
         </div>
     </div>
+    {% if form.state is defined %}
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.state) }}
+            </div>
+        </div>
+    {% endif %}
     <a class="btn btn-secondary" href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au projet</a>
     <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

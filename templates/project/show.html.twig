@@ -36,26 +36,35 @@
             <th>Description</th>
             <th>Date de début</th>
             <th>Date de fin</th>
+            <th>Etat</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for task in project.tasks %}
+        {% if is_granted('ROLE_ADMIN') or project.owner.id == app.user.id %}
+            {% set tasks = project.tasks %}
+        {% else %}
+            {% set tasks = project.notRemovedtasks %}
+        {% endif %}
+        {% for task in tasks %}
             <tr>
                 <td class="text-center">{{ task.id }}</td>
                 <td class="text-center">{{ task.name }}</td>
                 <td>{{ task.description }}</td>
                 <td class="text-center">{{ task.startingDate ? task.startingDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td class="text-center">{{ task.endingDate ? task.endingDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="text-center">{{ task.stateLibelled }}</td>
                 <td class="text-center col-2">
                     <a class="btn" href="{{ path('app_task_show', {'id': task.id}) }}"><i class="bi bi-eye"></i></a>
                     <a class="btn" href="{{ path('app_task_edit', {'id': task.id}) }}"><i class="bi bi-pencil"></i></a>
-                    {{ include('task/_delete_form.html.twig', {'class': 'btn'}) }}
+                    {% if not task.isRemoved %}
+                        {{ include('task/_delete_form.html.twig', {'class': 'btn'}) }}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">Aucune tâche</td>
+                <td colspan="7">Aucune tâche</td>
             </tr>
         {% endfor %}
         </tbody>

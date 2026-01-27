@@ -20,7 +20,7 @@ class ProjectRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne les projects associés à l'utilisateur connecté (propriétaire ou contributeur).
+     * Retourne les projets associés à l'utilisateur connecté (propriétaire ou contributeur).
      */
     public function findAllPaginated(?ProjectFiltering $projectFiltering): Query
     {

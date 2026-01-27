@@ -119,6 +119,18 @@ class Project
     }
 
     /**
+     * Retourne la liste des tâches associées au projet qui ne sont pas supprimées.
+     *
+     * @return Collection<int, Task>
+     */
+    public function getNotRemovedTasks(): Collection
+    {
+        return $this->tasks->filter(function (Task $task) {
+            return Task::STATE_REMOVED !== $task->getState();
+        });
+    }
+
+    /**
      * Associe la tâche au projet et retourne le projet.
      *
      * @return $this
