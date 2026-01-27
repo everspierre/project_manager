@@ -106,9 +106,7 @@ class TaskTest extends TestCase
     {
         $task = new Task();
 
-        $this->assertNull($task->getState());
-
-        $task->setState(Task::STATE_WAITING);
+        $this->assertNotNull($task->getState());
         $this->assertEquals(Task::STATE_WAITING, $task->getState());
 
         $task->setState(Task::STATE_RUNNING);
