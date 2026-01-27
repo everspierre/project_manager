@@ -5,8 +5,6 @@ namespace App\Tests\Application\Controller\Admin;
 use App\Entity\User;
 use App\Factory\UserFactory;
 use App\Repository\UserRepository;
-use Faker\Factory;
-use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,48 +13,40 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserControllerTest extends WebTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
      * Création d'un utilisateur.
-     *
-     * @return User
      */
     private function createUser(): User
     {
         return UserFactory::createOne([
             'email' => 'user@project.com',
-            'roles' => ['ROLE_USER']
+            'roles' => ['ROLE_USER'],
         ]);
     }
 
     /**
      * Création d'un administrateur.
-     *
-     * @return User
      */
     private function createAdmin(): User
     {
         return UserFactory::createOne([
             'email' => 'admin@project.com',
-            'roles' => ['ROLE_ADMIN']
+            'roles' => ['ROLE_ADMIN'],
         ]);
     }
 
     /**
      * Retourne le UserRepository.
-     *
-     * @return UserRepository
      */
     private function getUserRepository(): UserRepository
     {
         return static::getContainer()->get(UserRepository::class);
     }
 
-    /**
-     * @return Generator
-     */
-    public static function userProvider(): Generator
+    public static function userProvider(): \Generator
     {
         yield ['Emma', 'Smith', 'emma.smith@project.com'];
         yield ['Paul', 'Jack', 'paul.jack@project.com'];
@@ -64,8 +54,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ne peut accéder à la liste des utilisateurs.
-     *
-     * @return void
      */
     public function testUserCannotList(): void
     {
@@ -73,15 +61,13 @@ class UserControllerTest extends WebTestCase
         $user = $this->createUser();
         $client->loginUser($user);
 
-        $client->request('GET', "admin/user/");
+        $client->request('GET', 'admin/user/');
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un administrateur peut accéder à la liste des utilisateurs.
-     *
-     * @return void
      */
     public function testAdminCanList(): void
     {
@@ -89,15 +75,13 @@ class UserControllerTest extends WebTestCase
         $admin = $this->createAdmin();
         $client->loginUser($admin);
 
-        $client->request('GET', "admin/user/");
+        $client->request('GET', 'admin/user/');
 
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un utilisateur ne peut créer un nouvel utilisateur.
-     *
-     * @return void
      */
     public function testUserCannotCreate(): void
     {
@@ -105,19 +89,13 @@ class UserControllerTest extends WebTestCase
         $user = $this->createUser();
         $client->loginUser($user);
 
-        $client->request('GET', "admin/user/new");
+        $client->request('GET', 'admin/user/new');
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     /**
      * Vérifie qu'un administrateur peut créer un nouvel utilisateur.
-     *
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     *
-     * @return void
      */
     #[DataProvider('userProvider')]
     public function testAdminCanCreate(string $firstname, string $lastname, string $email): void
@@ -126,7 +104,7 @@ class UserControllerTest extends WebTestCase
         $admin = $this->createAdmin();
         $client->loginUser($admin);
 
-        $client->request('GET', "admin/user/new");
+        $client->request('GET', 'admin/user/new');
         $client->submitForm('Enregistrer', [
             'user_form[firstname]' => $firstname,
             'user_form[lastname]' => $lastname,
@@ -143,8 +121,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ne peut visualiser un autre utilisateur.
-     *
-     * @return void
      */
     public function testUserCannotShow(): void
     {
@@ -160,8 +136,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut visualiser un autre utilisateur.
-     *
-     * @return void
      */
     public function testAdminCanShow(): void
     {
@@ -177,8 +151,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ne peut modifier un autre utilisateur.
-     *
-     * @return void
      */
     public function testUserCannotEdit(): void
     {
@@ -194,12 +166,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut modifier un autre utilisateur.
-     *
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     *
-     * @return void
      */
     #[DataProvider('userProvider')]
     public function testAdminCanEdit(string $firstname, string $lastname, string $email): void
@@ -225,8 +191,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ne peut supprimer un autre utilisateur.
-     *
-     * @return void
      */
     public function testUserCannotDelete(): void
     {
@@ -242,8 +206,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut supprimer un autre utilisateur.
-     *
-     * @return void
      */
     public function testAdminCanDelete(): void
     {

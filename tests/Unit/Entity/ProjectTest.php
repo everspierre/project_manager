@@ -6,15 +6,11 @@ use App\Entity\Project;
 use App\Entity\Task;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 class ProjectTest extends TestCase
 {
-
     /**
      * Test l'initialisation et la récupération du nom du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetName(): void
     {
@@ -28,8 +24,6 @@ class ProjectTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de la description du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetDescription(): void
     {
@@ -43,8 +37,6 @@ class ProjectTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de l'auteur du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetOwner(): void
     {
@@ -67,8 +59,6 @@ class ProjectTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération des tâches du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetTasks(): void
     {
@@ -87,7 +77,6 @@ class ProjectTest extends TestCase
         $project->addTask($task2);
         $this->assertCount(2, $project->getTasks());
 
-
         $project->removeTask($task2);
         $this->assertCount(1, $project->getTasks());
 
@@ -97,8 +86,6 @@ class ProjectTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération des contributeurs du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetContributors(): void
     {
@@ -122,6 +109,5 @@ class ProjectTest extends TestCase
 
         $project->removeContributor($user2);
         $this->assertCount(0, $project->getContributors());
-
     }
 }

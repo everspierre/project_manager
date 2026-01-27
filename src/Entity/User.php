@@ -18,22 +18,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Rôle administrateur.
      */
-    const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     /**
      * Rôle utilisateur.
      */
-    const ROLE_USER = 'ROLE_USER';
+    public const ROLE_USER = 'ROLE_USER';
 
     /**
      * Liste des rôles.
      */
-    const ROLES = [self::ROLE_ADMIN, self::ROLE_USER];
+    public const ROLES = [self::ROLE_ADMIN, self::ROLE_USER];
 
     /**
      * Identifiant unique de l'utilisateur.
-     *
-     * @var int|null
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,8 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Email de l'utilisateur.
-     *
-     * @var string|null
      */
     #[ORM\Column(length: 180)]
     #[Assert\Email(
@@ -69,16 +65,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Prénom de l'utilisateur.
-     *
-     * @var string|null
      */
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
     /**
      * Nom de l'utilisateur.
-     *
-     * @var string|null
      */
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
@@ -105,8 +97,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne l'identifiant unique de l'utilisateur.
-     *
-     * @return int|null
      */
     public function getId(): ?int
     {
@@ -115,8 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne l'email de l'utilisateur.
-     *
-     * @return string|null
      */
     public function getEmail(): ?string
     {
@@ -125,8 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Initialise et retourne l'email de l'utilisateur.
-     *
-     * @param string $email
      *
      * @return $this
      */
@@ -167,14 +153,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne les libellés des rôles associés à l'utilisateur.
-     *
-     * @return array
      */
     public function getRolesLibelled(): array
     {
         $roles = $this->getRoles();
 
-        return array_map(function($role) {
+        return array_map(function ($role) {
             return match ($role) {
                 self::ROLE_ADMIN => 'Administrateur',
                 self::ROLE_USER => 'Utilisateur',
@@ -207,8 +191,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Initialise le mot de passe de l'utilisateur et retourne l'utilisateur.
      *
-     * @param string $password
-     *
      * @return $this
      */
     public function setPassword(string $password): static
@@ -237,8 +219,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le prénom de l'utilisateur.
-     *
-     * @return string|null
      */
     public function getFirstname(): ?string
     {
@@ -247,8 +227,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Initialise le prénom de l'utilisateur et retourne l'utilisateur.
-     *
-     * @param string $firstname
      *
      * @return $this
      */
@@ -261,8 +239,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le nom de l'utilisateur.
-     *
-     * @return string|null
      */
     public function getLastname(): ?string
     {
@@ -271,8 +247,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Initialise le nom de l'utilisateur et retourne l'utilisateur.
-     *
-     * @param string $lastname
      *
      * @return $this
      */
@@ -285,8 +259,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le nom complet de l'utilisateur.
-     *
-     * @return string|null
      */
     public function getName(): ?string
     {
@@ -306,8 +278,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Ajoute un projet propriétaire à l'utilisateur et retourne l'utilisateur.
      *
-     * @param Project $project
-     *
      * @return $this
      */
     public function addProjectOwnership(Project $project): static
@@ -322,8 +292,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Supprime un projet propriétaire de l'utilisateur et retourne l'utilisateur.
-     *
-     * @param Project $project
      *
      * @return $this
      */
@@ -352,8 +320,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Ajoute un projet de contribution à l'utilisateur et retourne l'utilisateur.
      *
-     * @param Project $projectContribution
-     *
      * @return $this
      */
     public function addProjectContribution(Project $projectContribution): static
@@ -368,8 +334,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Supprime un projet de contribution de l'utilisateur et retourne l'utilisateur.
-     *
-     * @param Project $projectContribution
      *
      * @return $this
      */

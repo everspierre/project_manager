@@ -19,12 +19,6 @@ final class TaskController extends AbstractController
 {
     /**
      * Création d'une tâche.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/new/{project_id}', name: 'app_task_new', methods: ['GET', 'POST'])]
     #[IsGranted('create_task', 'project')]
@@ -50,10 +44,6 @@ final class TaskController extends AbstractController
 
     /**
      * Détail d'une tâche.
-     *
-     * @param Task $task
-     *
-     * @return Response
      */
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     #[IsGranted('view', 'task')]
@@ -66,12 +56,6 @@ final class TaskController extends AbstractController
 
     /**
      * Mise à jour d'une tâche.
-     *
-     * @param Request $request
-     * @param Task $task
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'task')]
@@ -96,19 +80,13 @@ final class TaskController extends AbstractController
 
     /**
      * Suppression d'une tâche.
-     *
-     * @param Request $request
-     * @param Task $task
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route('/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     #[IsGranted('edit', 'task')]
     public function delete(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))
-            || $this->getParameter('kernel.environment') == 'test') {
+            || 'test' == $this->getParameter('kernel.environment')) {
             $entityManager->remove($task);
             $entityManager->flush();
         }

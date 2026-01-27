@@ -11,12 +11,9 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class TaskVoter extends Voter
 {
-    const VIEW = 'view';
-    const EDIT = 'edit';
+    public const VIEW = 'view';
+    public const EDIT = 'edit';
 
-    /**
-     * @param AccessDecisionManagerInterface $accessDecisionManager
-     */
     public function __construct(
         private AccessDecisionManagerInterface $accessDecisionManager,
     ) {
@@ -24,11 +21,6 @@ class TaskVoter extends Voter
 
     /**
      * Vérifie si l'utilisateur du Voter est légitime.
-     *
-     * @param string $attribute
-     * @param mixed $subject
-     *
-     * @return bool
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -45,13 +37,6 @@ class TaskVoter extends Voter
 
     /**
      * Vérifie les droits d'accès.
-     *
-     * @param string $attribute
-     * @param mixed $subject
-     * @param TokenInterface $token
-     * @param Vote|null $vote
-     *
-     * @return bool
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
@@ -60,6 +45,7 @@ class TaskVoter extends Voter
         if (!$user instanceof User) {
             // the user must be logged in; if not, deny access
             $vote?->addReason("L'utilisateur n'est pas connecté.");
+
             return false;
         }
 
@@ -67,20 +53,15 @@ class TaskVoter extends Voter
             return true;
         }
 
-        return match($attribute) {
+        return match ($attribute) {
             self::VIEW => $this->canView($subject, $user),
             self::EDIT => $this->canEdit($subject, $user, $vote),
-            default => throw new \LogicException('This code should not be reached!')
+            default => throw new \LogicException('This code should not be reached!'),
         };
     }
 
     /**
      * Vérifie si l'utilisateur peut visualiser la tâche.
-     *
-     * @param Task|null $task
-     * @param User $user
-     *
-     * @return bool
      */
     public function canView(?Task $task, User $user): bool
     {
@@ -93,12 +74,6 @@ class TaskVoter extends Voter
 
     /**
      * Vérifie si l'utilisateur peut mettre à jour la tâche.
-     *
-     * @param Task|null $task
-     * @param User $user
-     * @param Vote|null $vote
-     *
-     * @return bool
      */
     public function canEdit(?Task $task, User $user, ?Vote $vote): bool
     {

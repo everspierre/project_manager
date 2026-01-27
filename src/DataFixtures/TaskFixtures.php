@@ -11,19 +11,12 @@ use Faker\Factory;
 
 class TaskFixtures extends Fixture implements DependentFixtureInterface
 {
-    /**
-     * @param ProjectRepository $projectRepository
-     */
     public function __construct(private ProjectRepository $projectRepository)
     {
     }
 
     /**
      * Création de 20 projets aléatoires.
-     *
-     * @param ObjectManager $manager
-     *
-     * @return void
      */
     public function load(ObjectManager $manager): void
     {
@@ -32,7 +25,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($projects as $project) {
             $nbTasks = $faker->numberBetween(1, 5);
-            for  ($j=0; $j < $nbTasks; $j++) {
+            for ($j = 0; $j < $nbTasks; ++$j) {
                 $task = new Task();
                 $task->setName($faker->sentence());
                 $task->setDescription($faker->text());
@@ -48,8 +41,6 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
     /**
      * Initialisation des dépendances en amont.
-     *
-     * @return array
      */
     public function getDependencies(): array
     {

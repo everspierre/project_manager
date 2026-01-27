@@ -14,11 +14,6 @@ class UserFilteringForm extends AbstractType
 {
     /**
      * Initialise les composants du formulaire.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     *
-     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -27,22 +22,22 @@ class UserFilteringForm extends AbstractType
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Prénom'
-                ]
+                    'placeholder' => 'Prénom',
+                ],
             ])
             ->add('lastname', TextType::class, [
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Nom'
-                ]
+                    'placeholder' => 'Nom',
+                ],
             ])
             ->add('email', EmailType::class, [
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Email'
-                ]
+                    'placeholder' => 'Email',
+                ],
             ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
@@ -51,17 +46,13 @@ class UserFilteringForm extends AbstractType
                 ],
                 'required' => false,
                 'label' => false,
-                'placeholder' => 'Rôle'
+                'placeholder' => 'Rôle',
             ])
         ;
     }
 
     /**
      * Initialise la configuration du formulaire.
-     *
-     * @param OptionsResolver $resolver
-     *
-     * @return void
      */
     public function configureOptions(OptionsResolver $resolver): void
     {

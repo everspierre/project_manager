@@ -10,26 +10,19 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    /**
-     * @param UserPasswordHasherInterface $passwordHasher
-     */
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
     {
     }
 
     /**
      * Création de 20 utilisateurs aléatoires.
-     *
-     * @param ObjectManager $manager
-     *
-     * @return void
      */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr-FR');
 
         /**
-         * Administrateur
+         * Administrateur.
          */
         $admin = new User();
         $admin->setFirstname('Admin');
@@ -41,7 +34,7 @@ class UserFixtures extends Fixture
         $manager->persist($admin);
 
         /**
-         * Utilisateur
+         * Utilisateur.
          */
         $user = new User();
         $user->setFirstname('User');
@@ -52,7 +45,7 @@ class UserFixtures extends Fixture
         $user->setPassword($password);
         $manager->persist($user);
 
-        for ($i=0; $i <= 20; $i++) {
+        for ($i = 0; $i <= 20; ++$i) {
             $user = new User();
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);

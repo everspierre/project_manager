@@ -9,11 +9,8 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 class TaskTest extends TestCase
 {
-
     /**
      * Test l'initialisation et la récupération du nom de la tâche.
-     *
-     * @return void
      */
     public function testCanSetAndGetName(): void
     {
@@ -30,8 +27,6 @@ class TaskTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de la description de la tâche.
-     *
-     * @return void
      */
     public function testCanSetAndGetDescription(): void
     {
@@ -48,8 +43,6 @@ class TaskTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de la date de début de la tâche.
-     *
-     * @return void
      */
     public function testCanSetAndGetStartingDate(): void
     {
@@ -57,8 +50,8 @@ class TaskTest extends TestCase
 
         $this->assertNull($task->getStartingDate());
 
-        $task->setStartingDate(\Datetime::createFromFormat('Y-m-d', '2019-01-01'));
-        $this->assertEquals(\Datetime::createFromFormat('Y-m-d', '2019-01-01'), $task->getStartingDate());
+        $task->setStartingDate(\DateTime::createFromFormat('Y-m-d', '2019-01-01'));
+        $this->assertEquals(\DateTime::createFromFormat('Y-m-d', '2019-01-01'), $task->getStartingDate());
 
         $task->setStartingDate(new \DateTime('2023-01-01'));
         $this->assertNotEquals(new \DateTime(), $task->getStartingDate());
@@ -66,8 +59,6 @@ class TaskTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de la date de fin de la tâche.
-     *
-     * @return void
      */
     public function testCanSetAndGetEndingDate(): void
     {
@@ -76,24 +67,22 @@ class TaskTest extends TestCase
         $this->assertNull($task->getEndingDate());
 
         $this->expectException(InvalidArgumentException::class);
-        $task->setEndingDate(\Datetime::createFromFormat('Y-m-d', '2018-01-01'));
+        $task->setEndingDate(\DateTime::createFromFormat('Y-m-d', '2018-01-01'));
 
-        $task->setStartingDate(\Datetime::createFromFormat('Y-m-d', '2019-01-01'));
+        $task->setStartingDate(\DateTime::createFromFormat('Y-m-d', '2019-01-01'));
 
-        $task->setEndingDate(\Datetime::createFromFormat('Y-m-d', '2019-02-01'));
-        $this->assertEquals(\Datetime::createFromFormat('Y-m-d', '2019-02-01'), $task->getEndingDate());
+        $task->setEndingDate(\DateTime::createFromFormat('Y-m-d', '2019-02-01'));
+        $this->assertEquals(\DateTime::createFromFormat('Y-m-d', '2019-02-01'), $task->getEndingDate());
 
         $task->setEndingDate(new \DateTime('2023-01-01'));
         $this->assertNotEquals(new \DateTime(), $task->getEndingDate());
 
         $this->expectException(InvalidArgumentException::class);
-        $task->setEndingDate(\Datetime::createFromFormat('Y-m-d', '2018-01-01'));
+        $task->setEndingDate(\DateTime::createFromFormat('Y-m-d', '2018-01-01'));
     }
 
     /**
      * Test l'initialisation et la récupération du projet.
-     *
-     * @return void
      */
     public function testCanSetAndGetProject(): void
     {
@@ -108,6 +97,5 @@ class TaskTest extends TestCase
         $otherProject = new Project();
         $task->setProject($otherProject);
         $this->assertNotSame($project, $task->getProject());
-
     }
 }

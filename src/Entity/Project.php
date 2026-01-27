@@ -13,8 +13,6 @@ class Project
 {
     /**
      * Identifiant unique du projet.
-     *
-     * @var int|null
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,16 +21,12 @@ class Project
 
     /**
      * Nom du projet.
-     *
-     * @var string|null
      */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     /**
      * Description du projet.
-     *
-     * @var string|null
      */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -47,8 +41,6 @@ class Project
 
     /**
      * Utilisateur propriétaire du projet.
-     *
-     * @var User|null
      */
     #[ORM\ManyToOne(inversedBy: 'projectOwnerships')]
     #[ORM\JoinColumn(nullable: false)]
@@ -70,8 +62,6 @@ class Project
 
     /**
      * Retourne l'identifiant unique du projet.
-     *
-     * @return int|null
      */
     public function getId(): ?int
     {
@@ -80,8 +70,6 @@ class Project
 
     /**
      * Retourne le nom du projet.
-     *
-     * @return string|null
      */
     public function getName(): ?string
     {
@@ -90,8 +78,6 @@ class Project
 
     /**
      * Initialise et retourne le nom du projet.
-     *
-     * @param string $name
      *
      * @return $this
      */
@@ -104,8 +90,6 @@ class Project
 
     /**
      * Retourne la description du projet.
-     *
-     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -114,8 +98,6 @@ class Project
 
     /**
      * Initialise et retourne la description du projet.
-     *
-     * @param string|null $description
      *
      * @return $this
      */
@@ -139,8 +121,6 @@ class Project
     /**
      * Associe la tâche au projet et retourne le projet.
      *
-     * @param Task $task
-     *
      * @return $this
      */
     public function addTask(Task $task): static
@@ -155,8 +135,6 @@ class Project
 
     /**
      * Supprime l'association de la tâche au projet et retourne le projet.
-     *
-     * @param Task $task
      *
      * @return $this
      */
@@ -174,8 +152,6 @@ class Project
 
     /**
      * Retourne le propriétaire du projet.
-     *
-     * @return User|null
      */
     public function getOwner(): ?User
     {
@@ -184,8 +160,6 @@ class Project
 
     /**
      * Initialise le propriétaire du projet et retourne le projet.
-     *
-     * @param User|null $owner
      *
      * @return $this
      */
@@ -198,10 +172,6 @@ class Project
 
     /**
      * Vérifie si l'utilisateur est le propriétaire.
-     *
-     * @param User $user
-     *
-     * @return bool
      */
     public function isOwner(User $user): bool
     {
@@ -221,8 +191,6 @@ class Project
     /**
      * Ajoute un contributeur au projet et retourne le projet.
      *
-     * @param User $contributor
-     *
      * @return $this
      */
     public function addContributor(User $contributor): static
@@ -237,8 +205,6 @@ class Project
     /**
      * Supprime un contributeur du projet et retourne le projet.
      *
-     * @param User $contributor
-     *
      * @return $this
      */
     public function removeContributor(User $contributor): static
@@ -250,10 +216,6 @@ class Project
 
     /**
      * Vérifie si un utilisateur est contributeur du projet.
-     *
-     * @param User $user
-     *
-     * @return bool
      */
     public function isContributor(User $user): bool
     {

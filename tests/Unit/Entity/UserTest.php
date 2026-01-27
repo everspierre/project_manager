@@ -8,11 +8,8 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 class UserTest extends TestCase
 {
-
     /**
      * Test l'initialisation et la récupération du prénom de l'utilisateur.
-     *
-     * @return void
      */
     public function testCanSetAndGetFirstname(): void
     {
@@ -26,8 +23,6 @@ class UserTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération du nom de l'utilisateur.
-     *
-     * @return void
      */
     public function testCanSetAndGetLastname(): void
     {
@@ -44,8 +39,6 @@ class UserTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération de l'email de l'utilisateur.
-     *
-     * @return void
      */
     public function testCanSetAndGetEmail(): void
     {
@@ -65,8 +58,6 @@ class UserTest extends TestCase
 
     /**
      * Test l'initialisation et la récupération des rôles de l'utilisateur.
-     *
-     * @return void
      */
     public function testCanSetAndGetRoles(): void
     {

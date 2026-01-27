@@ -10,20 +10,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class UserVoter extends Voter
 {
-    const VIEW = 'view';
-    const EDIT = 'edit';
+    public const VIEW = 'view';
+    public const EDIT = 'edit';
 
-    /**
-     * @param AccessDecisionManagerInterface $accessDecisionManager
-     */
     public function __construct(
         private AccessDecisionManagerInterface $accessDecisionManager,
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         if (!in_array($attribute, [self::VIEW, self::EDIT])) {
@@ -37,9 +31,6 @@ class UserVoter extends Voter
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
@@ -47,6 +38,7 @@ class UserVoter extends Voter
         if (!$user instanceof User) {
             // the user must be logged in; if not, deny access
             $vote?->addReason("L'utilisateur n'est pas connecté.");
+
             return false;
         }
 
@@ -54,36 +46,27 @@ class UserVoter extends Voter
             return true;
         }
 
-        return match($attribute) {
+        return match ($attribute) {
             self::VIEW => $this->canView($subject, $user),
             self::EDIT => $this->canEdit($subject, $user, $vote),
-            default => throw new \LogicException('This code should not be reached!')
+            default => throw new \LogicException('This code should not be reached!'),
         };
     }
 
     /**
      * Vérifie si l'utilisateur connecté peut visualiser l'utilisateur.
-     *
-     * @param User $user
-     * @param User $connectedUser
-     *
-     * @return bool
      */
     public function canView(User $user, User $connectedUser): bool
     {
         if ($this->canEdit($user, $connectedUser, null)) {
             return true;
         }
+
+        return false;
     }
 
     /**
      * Vérifie si l'utilisateur connecté peut mettre à jour l'utilisateur.
-     *
-     * @param User $user
-     * @param User $connectedUser
-     * @param Vote|null $vote
-     *
-     * @return bool
      */
     public function canEdit(User $user, User $connectedUser, ?Vote $vote): bool
     {

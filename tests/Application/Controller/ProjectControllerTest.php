@@ -15,12 +15,11 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProjectControllerTest extends WebTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     /**
      * Création d'un projet.
-     *
-     * @return Project
      */
     private function createProject(): Project
     {
@@ -29,8 +28,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Création d'un utilisateur.
-     *
-     * @return User
      */
     private function createUser(): User
     {
@@ -42,8 +39,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Création d'un administrateur.
-     *
-     * @return User
      */
     private function createAdmin(): User
     {
@@ -55,8 +50,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Retourne le ProjectRepository.
-     *
-     * @return ProjectRepository
      */
     private function getProjectRepository(): ProjectRepository
     {
@@ -65,8 +58,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur accède aux projets dont il est contributeur.
-     *
-     * @return void
      */
     public function testUserCanList(): void
     {
@@ -78,8 +69,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ni administrateur ni propriétaire ni contributeur ne peut voir le projet.
-     *
-     * @return void
      */
     public function testUserCannotShow(): void
     {
@@ -92,13 +81,11 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut voir le projet.
-     *
-     * @return void
      */
     public function testAdminCanShow(): void
     {
         $client = static::createClient();
-        $project =  $this->createProject();
+        $project = $this->createProject();
         $client->loginUser($this->createAdmin());
         $client->request('GET', "/project/{$project->getId()}");
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -106,13 +93,11 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un propriétaire peut voir le projet.
-     *
-     * @return void
      */
     public function testOwerCanShow(): void
     {
         $client = static::createClient();
-        $project =  $this->createProject();
+        $project = $this->createProject();
         $client->loginUser($project->getOwner());
         $client->request('GET', "/project/{$project->getId()}");
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -120,13 +105,11 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur peut voir le projet.
-     *
-     * @return void
      */
     public function testContributorCanShow(): void
     {
         $client = static::createClient();
-        $project =  $this->createProject();
+        $project = $this->createProject();
         $client->loginUser($project->getContributors()->first());
         $client->request('GET', "/project/{$project->getId()}");
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -134,8 +117,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur peut créer un nouveau projet.
-     *
-     * @return void
      */
     public function testUserCanCreate(): void
     {
@@ -155,8 +136,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ni administrateur ni propriétaire ni contributeur ne peut modifier un projet.
-     *
-     * @return void
      */
     public function testUserCannotEdit(): void
     {
@@ -171,8 +150,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur ne peut modifier un projet.
-     *
-     * @return void
      */
     public function testContributorCannotEdit(): void
     {
@@ -188,8 +165,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut modifier un projet.
-     *
-     * @return void
      */
     public function testAdminCanEdit(): void
     {
@@ -204,7 +179,7 @@ class ProjectControllerTest extends WebTestCase
         $newDescription = Factory::create()->text(255);
         $client->submitForm('Enregistrer', [
             'project[name]' => $newName,
-            'project[description]' => $newDescription
+            'project[description]' => $newDescription,
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
         $this->assertSame($newName, $this->getProjectRepository()->findOneById($project->getId())->getName());
@@ -213,8 +188,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur propriétaire peut modifier un projet.
-     *
-     * @return void
      */
     public function testOwnerCanEdit(): void
     {
@@ -228,7 +201,7 @@ class ProjectControllerTest extends WebTestCase
         $newDescription = Factory::create()->text(255);
         $client->submitForm('Enregistrer', [
             'project[name]' => $newName,
-            'project[description]' => $newDescription
+            'project[description]' => $newDescription,
         ]);
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
         $this->assertSame($newName, $this->getProjectRepository()->findOneById($project->getId())->getName());
@@ -237,8 +210,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ni administrateur ni propriétaire ni contributeur ne peut supprimer un projet.
-     *
-     * @return void
      */
     public function testUserCannotDelete(): void
     {
@@ -253,8 +224,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur ne peut supprimer un projet.
-     *
-     * @return void
      */
     public function testContributorCannotDelete(): void
     {
@@ -270,8 +239,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut supprimer un projet.
-     *
-     * @return void
      */
     public function testAdminCanDelete(): void
     {
@@ -286,8 +253,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur propriétaire peut supprimer un projet.
-     *
-     * @return void
      */
     public function testOwnerCanDelete(): void
     {
@@ -301,8 +266,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur ni administrateur ni propriétaire ni contributeur ne peut supprimer un contributeur du projet.
-     *
-     * @return void
      */
     public function testUserCannotDeleteContributor(): void
     {
@@ -317,8 +280,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un contributeur ne peut supprimer un contributeur du projet.
-     *
-     * @return void
      */
     public function testContributorCannotDeleteContributor(): void
     {
@@ -334,8 +295,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un administrateur peut supprimer un contributeur du projet.
-     *
-     * @return void
      */
     public function testAdminCanDeleteContributor(): void
     {
@@ -350,8 +309,6 @@ class ProjectControllerTest extends WebTestCase
 
     /**
      * Vérifie qu'un utilisateur propriétaire peut supprimer un contributeur du projet.
-     *
-     * @return void
      */
     public function testOwnerCanDeleteContributor(): void
     {
@@ -362,5 +319,4 @@ class ProjectControllerTest extends WebTestCase
         $client->request('POST', "/project/{$project->getId()}/{$project->getOwner()->getId()}/delete-contributor");
         $this->assertSame(Response::HTTP_SEE_OTHER, $client->getResponse()->getStatusCode());
     }
-
 }

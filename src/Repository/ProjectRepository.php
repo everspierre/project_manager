@@ -21,10 +21,6 @@ class ProjectRepository extends ServiceEntityRepository
 
     /**
      * Retourne les projects associés à l'utilisateur connecté (propriétaire ou contributeur).
-     *
-     * @param ProjectFiltering|null $projectFiltering
-     *
-     * @return Query
      */
     public function findAllPaginated(?ProjectFiltering $projectFiltering): Query
     {
@@ -43,7 +39,7 @@ class ProjectRepository extends ServiceEntityRepository
         if ($projectFiltering && $projectFiltering->getName()) {
             $query
                 ->andWhere('LOWER(p.name) LIKE LOWER(:name)')
-                ->setParameter('name', '%' . $projectFiltering->getName() . '%')
+                ->setParameter('name', '%'.$projectFiltering->getName().'%')
             ;
         }
 

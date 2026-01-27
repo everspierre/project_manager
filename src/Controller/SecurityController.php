@@ -14,10 +14,6 @@ class SecurityController extends AbstractController
 {
     /**
      * Connecte l'utilisateur.
-     *
-     * @param AuthenticationUtils $authenticationUtils
-     *
-     * @return Response
      */
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -36,8 +32,6 @@ class SecurityController extends AbstractController
 
     /**
      * Déconnecte l'utilisateur.
-     *
-     * @return void
      */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
@@ -47,14 +41,9 @@ class SecurityController extends AbstractController
 
     /**
      * Enregistre l'utilisateur admin.
-     *
-     * @param UserPasswordHasherInterface $userPasswordHasher
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return Response
      */
     #[Route(path: '/register', name: 'app_register')]
-    public function register(UserPasswordHasherInterface  $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $admin = new User();
         $admin->setEmail('admin@project.com');
