@@ -233,6 +233,21 @@ class Task
     }
 
     /**
+     * Retourne la classe Css de l'état de la tâche.
+     */
+    public function getStateTableClass(): ?string
+    {
+        return match ($this->state) {
+            self::STATE_WAITING => 'table-secondary',
+            self::STATE_RUNNING => 'table-warning',
+            self::STATE_COMPLETED => 'table-success',
+            self::STATE_CANCELLED => 'table-light',
+            self::STATE_REMOVED => 'table-danger',
+            default => '',
+        };
+    }
+
+    /**
      * Initialise et retourne l'état de la tâche.
      *
      * @return $this
