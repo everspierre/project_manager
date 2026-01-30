@@ -98,4 +98,27 @@ class TaskTest extends TestCase
         $task->setProject($otherProject);
         $this->assertNotSame($project, $task->getProject());
     }
+
+    /**
+     * Test l'initialisation et la récupération de l'état de la tâche.
+     */
+    public function testCanSetAndGetState(): void
+    {
+        $task = new Task();
+
+        $this->assertNotNull($task->getState());
+        $this->assertEquals(Task::STATE_WAITING, $task->getState());
+
+        $task->setState(Task::STATE_RUNNING);
+        $this->assertEquals(Task::STATE_RUNNING, $task->getState());
+
+        $task->setState(Task::STATE_COMPLETED);
+        $this->assertEquals(Task::STATE_COMPLETED, $task->getState());
+
+        $task->setState(Task::STATE_CANCELLED);
+        $this->assertEquals(Task::STATE_CANCELLED, $task->getState());
+
+        $task->setState(Task::STATE_REMOVED);
+        $this->assertEquals(Task::STATE_REMOVED, $task->getState());
+    }
 }

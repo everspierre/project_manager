@@ -12,6 +12,42 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 class Task
 {
     /**
+     * Etat "en attente".
+     */
+    public const STATE_WAITING = 'en_attente';
+
+    /**
+     * Etat "en cours".
+     */
+    public const STATE_RUNNING = 'en_cours';
+
+    /**
+     * Etat "annulée".
+     */
+    public const STATE_CANCELLED = 'annulée';
+
+    /**
+     * Etat "terminée".
+     */
+    public const STATE_COMPLETED = 'terminée';
+
+    /**
+     * Etat "supprimée".
+     */
+    public const STATE_REMOVED = 'supprimée';
+
+    /**
+     * Liste des états.
+     */
+    public const STATES = [
+        self::STATE_WAITING,
+        self::STATE_RUNNING,
+        self::STATE_CANCELLED,
+        self::STATE_COMPLETED,
+        self::STATE_REMOVED,
+    ];
+
+    /**
      * Identifiant unique de la tâche.
      */
     #[ORM\Id]
@@ -50,6 +86,12 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
+
+    /**
+     * Etat de la tâche.
+     */
+    #[ORM\Column(length: 255)]
+    private ?string $state = self::STATE_WAITING;
 
     /**
      * Retourne l'identifiant unique de la tâche.
@@ -165,5 +207,63 @@ class Task
         $this->project = $project;
 
         return $this;
+    }
+
+    /**
+     * Retourne l'état de la tâche.
+     */
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    /**
+     * Retourne le libellé de l'état de la tâche.
+     */
+    public function getStateLibelled(): ?string
+    {
+        return match ($this->state) {
+            self::STATE_WAITING => 'En attente',
+            self::STATE_RUNNING => 'En cours',
+            self::STATE_COMPLETED => 'Terminée',
+            self::STATE_CANCELLED => 'Annulée',
+            self::STATE_REMOVED => 'Supprimée',
+            default => '?',
+        };
+    }
+
+    /**
+     * Retourne la classe Css de l'état de la tâche.
+     */
+    public function getStateTableClass(): ?string
+    {
+        return match ($this->state) {
+            self::STATE_WAITING => 'table-secondary',
+            self::STATE_RUNNING => 'table-warning',
+            self::STATE_COMPLETED => 'table-success',
+            self::STATE_CANCELLED => 'table-light',
+            self::STATE_REMOVED => 'table-danger',
+            default => '',
+        };
+    }
+
+    /**
+     * Initialise et retourne l'état de la tâche.
+     *
+     * @return $this
+     */
+    public function setState(string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Vérifie si la tâche est supprimée.
+     */
+    public function isRemoved(): bool
+    {
+        return self::STATE_REMOVED === $this->state;
     }
 }

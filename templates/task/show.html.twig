@@ -31,6 +31,10 @@
                 <th>Date de fin</th>
                 <td>{{ task.endingDate ? task.endingDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ task.stateLibelled }}</td>
+            </tr>
         </tbody>
     </table>
 

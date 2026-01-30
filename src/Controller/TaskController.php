@@ -26,7 +26,8 @@ final class TaskController extends AbstractController
     {
         $task = new Task();
         $task->setProject($project);
-        $form = $this->createForm(TaskType::class, $task);
+        $disableState = ($this->isGranted('ROLE_ADMIN') || $project->isOwner($this->getUser())) ? false : true;
+        $form = $this->createForm(TaskType::class, $task, ['disable_state' => $disableState]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -87,7 +88,7 @@ final class TaskController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->getPayload()->getString('_token'))
             || 'test' == $this->getParameter('kernel.environment')) {
-            $entityManager->remove($task);
+            $task->setState(Task::STATE_REMOVED);
             $entityManager->flush();
         }
 
