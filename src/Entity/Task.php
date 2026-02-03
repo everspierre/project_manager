@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\BlameableEntity;
+use App\Entity\Traits\TimestampableEntity;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,9 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 #[ORM\HasLifecycleCallbacks]
 class Task
 {
-    use TimestampTrait;
+    use TimestampableEntity;
+
+    use BlameableEntity;
 
     /**
      * Etat "en attente".

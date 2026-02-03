@@ -13,6 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -47,7 +48,7 @@ class UserController extends AbstractController
      * Création d'un nouvel utilisateur.
      */
     #[Route(path: '/new', name: 'app_admin_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $user->setRoles(['ROLE_USER']);
@@ -55,6 +56,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -103,12 +106,14 @@ class UserController extends AbstractController
      * Mise à jour du mot de passe de l'utilisateur.
      */
     #[Route(path: '/{id}/edit-password', name: 'app_admin_user_edit_password', methods: ['GET', 'POST'])]
-    public function editPassword(Request $request, EntityManagerInterface $entityManager, User $user): Response
+    public function editPassword(Request $request, EntityManagerInterface $entityManager, User $user, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserPasswordForm::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_admin_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);

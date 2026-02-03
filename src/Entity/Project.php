@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\BlameableEntity;
+use App\Entity\Traits\TimestampableEntity;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Project
 {
-    use TimestampTrait;
+    use TimestampableEntity;
+
+    use BlameableEntity;
 
     /**
      * Identifiant unique du projet.

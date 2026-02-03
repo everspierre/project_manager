@@ -1,0 +1,55 @@
+<?php
+
+namespace App\EventListener\BlameableListener;
+
+use App\Entity\Traits\BlameableEntity;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+#[AsDoctrineListener(event: Events::preUpdate, priority: 500, connection: 'default')]
+class PreUpdateListener
+{
+    public function __construct(private readonly TokenStorageInterface $tokenStorage)
+    {
+    }
+
+    /**
+     * Initialise le modificateur de l'objet.
+     */
+    public function preUpdate(LifecycleEventArgs $event): void
+    {
+        $entity = $event->getObject();
+
+        if (in_array(BlameableEntity::class, array_keys((new \ReflectionClass($entity))->getTraits()))) {
+            if (null === $entity->getId() && method_exists($entity, 'setCreatedBy')) {
+                $entity->setCreatedBy($this->getUser());
+            }
+            if (method_exists($entity, 'setUpdatedBy')) {
+                $entity->setUpdatedBy($this->getUser());
+            }
+        }
+    }
+
+    /**
+     * Retourne l'utilisateur connecté.
+     */
+    public function getUser(): ?UserInterface
+    {
+        if (!$this->tokenStorage) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+
+        return $user;
+    }
+}
