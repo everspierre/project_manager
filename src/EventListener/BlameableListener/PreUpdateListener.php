@@ -35,8 +35,6 @@ class PreUpdateListener
 
     /**
      * Retourne l'utilisateur connecté.
-     *
-     * @return UserInterface|null
      */
     public function getUser(): ?UserInterface
     {
