@@ -2,10 +2,9 @@
 
 namespace App\Entity\Traits;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-trait TimestampTrait
+trait TimestampableEntity
 {
     /**
      * Date de création.
@@ -30,7 +29,7 @@ trait TimestampTrait
     /**
      * Initialise la date de création.
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -48,7 +47,7 @@ trait TimestampTrait
     /**
      * Initialise la date de modification.
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -61,7 +60,7 @@ trait TimestampTrait
     {
         $now = new \DateTime();
         $this->setUpdatedAt($now);
-        if ($this->getId() === null) {
+        if (null === $this->getId()) {
             $this->setCreatedAt($now);
         }
     }

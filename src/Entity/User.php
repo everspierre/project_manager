@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\BlameableEntity;
+use App\Entity\Traits\TimestampableEntity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,7 +18,9 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    use TimestampTrait;
+    use TimestampableEntity;
+
+    use BlameableEntity;
 
     /**
      * Rôle administrateur.
