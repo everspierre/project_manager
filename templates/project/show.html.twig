@@ -26,6 +26,12 @@
         </tbody>
     </table>
 
+    <hr>
+
+    {{ include('file/_file_list.html.twig', {'files': project.files}) }}
+
+    <hr>
+
     <h1>Liste des tâches</h1>
 
     <table class="table table-hover align-middle">
@@ -73,6 +79,8 @@
         <a href="{{ path('app_task_new', {'project_id': project.id}) }}">Ajouter une tâche</a>
     {% endif %}
 
+    <hr>
+
     <h1>Liste des contributeurs</h1>
 
     <table class="table table-hover table-striped align-middle">
@@ -105,6 +113,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <hr>
 
     <a type="button" class="btn btn-secondary" href="{{ path('app_project_index') }}">Retour à la liste</a>
 

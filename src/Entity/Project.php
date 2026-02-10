@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\BlameableEntity;
+use App\Entity\Traits\FileAwareTrait;
 use App\Entity\Traits\TimestampableEntity;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,6 +18,8 @@ class Project
     use TimestampableEntity;
 
     use BlameableEntity;
+
+    use FileAwareTrait;
 
     /**
      * Identifiant unique du projet.

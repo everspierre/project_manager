@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Traits\BlameableEntity;
+use App\Entity\Traits\FileAwareTrait;
 use App\Entity\Traits\TimestampableEntity;
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,6 +19,8 @@ class Task
     use TimestampableEntity;
 
     use BlameableEntity;
+
+    use FileAwareTrait;
 
     /**
      * Etat "en attente".
@@ -99,6 +103,11 @@ class Task
      */
     #[ORM\Column(length: 255)]
     private ?string $state = self::STATE_WAITING;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
 
     /**
      * Retourne l'identifiant unique de la tâche.

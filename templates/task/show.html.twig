@@ -38,6 +38,12 @@
         </tbody>
     </table>
 
+    <hr>
+
+    {{ include('file/_file_list.html.twig', {'files': task.files}) }}
+
+    <hr>
+
     <a class="btn btn-secondary" href="{{ path('app_project_show', {'id' : task.project.id}) }}">Retour au projet</a>
 
     <a class="btn btn-primary" href="{{ path('app_task_edit', {'id': task.id}) }}">Mettre à jour</a>

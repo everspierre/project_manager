@@ -14,7 +14,18 @@
             {{ form_row(form.contributors) }}
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.pendingFiles) }}
+        </div>
+    </div>
     <a type="button" class="btn btn-secondary" href="{{ path('app_project_index') }}">Retour à la liste</a>
     <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
+
+{% if project.id is not null %}
+    <hr>
+    
+    {{ include('file/_file_list.html.twig', {'files': project.files}) }}
+{% endif %}
 
